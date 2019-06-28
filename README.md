@@ -1,4 +1,4 @@
-# ch<strong style="color: #0095ff">ANGEL</strong>og <strong style="color: #0095ff">BOT</strong>
+# ~~ch~~<strong style="color: #0095ff">ANGEL</strong>~~og~~ <strong style="color: #0095ff">BOT</strong>
 
 This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
 
