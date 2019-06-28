@@ -1,4 +1,4 @@
-# chANGELog BOT
+# ch<span style="color: #0095ff">ANGEL</span>og <span style="color: #ff6a00">BOT</span>
 
 This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
 
