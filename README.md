@@ -1,4 +1,4 @@
-# ch<font style="color: #0095ff">ANGEL</font>og <font style="color: #ff6a00">BOT</font>
+# ch<font color="#0095ff">ANGEL</font>og <font color="#0095ff">BOT</font>
 
 This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
 
