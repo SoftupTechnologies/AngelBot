@@ -1,4 +1,4 @@
-# Changelogs Bot
+# chANGELog BOT
 
 This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
 
