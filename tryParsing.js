@@ -10,7 +10,7 @@ module.exports = function parseInput(textInput) {
                 throw new Error("Not complete!");
             }
             console.log(parser.results[0]);
-            return (parser.results[0]).join('');
+            return (parser.results[0]);
         } catch (e) {
             return ("Input is not well formed! " + e);
         }
