@@ -14,17 +14,9 @@ const lexer = moo.compile({
     DESCRPT: {match: /\*[\w\(\)\`\´ ]+/},
     PAR_L: '(',
     PAR_R: ')',
-    SQBR_L: '[',
-    SQBR_R: ']',
-    BRACE_L: '{',
-    BRACE_R: '}',
     COLON: ':',
-    SEMICOLON: ';',
-    COMMA: ',',
     ASTERISK: '*',
     HASH: '#',
-    STRING: {match: /"(?:\\["\\]|[^\n"\\])*"/, value: s => s.slice(1, -1)},
-    QUOT: '"',
     WS: {
       match: /\s+/,
       lineBreaks: true
