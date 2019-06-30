@@ -3,32 +3,85 @@
 This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
 
 ### example API call:
-`curl -X POST http://localhost:5000/api/v1/parse -d content="## 1.0.0  (31.01.2019)"`
+`curl -X POST http://localhost:5000/api/v1/parse -d content="content from test changelog"`
 
 ### response: 
 ```
-[{
-	version: {
-		type: 'VERSION',
-		value: '1.0.0',
-		text: '1.0.0',
-		toString: [Function: tokenToString],
-		offset: 3,
-		lineBreaks: 0,
-		line: 1,
-		col: 4
-	},
-	date: {
-		type: 'DATE',
-		value: '31.01.2019',
-		text: '31.01.2019',
-		toString: [Function: tokenToString],
-		offset: 11,
-		lineBreaks: 0,
-		line: 1,
-		col: 12
-	}
-}]
+{
+    "success":"true",
+    "message":{
+        "changelog":[
+            {
+                "version":"1.0.0",
+                "date":"Unreleased",
+                "changes":[
+                    {
+                        "BUG FIXES":[
+                            {
+                                "description":"* fix a problem with router not responding to back button ",
+                                "pr":"[PR#30466]"
+                            },
+                            {
+                                "description":"* IE 11 bug can break URL unification when comparing objects ",
+                                "pr":"[PR#30422]"
+                            },
+                            {
+                                "description":"* add ability to watch for AngularJS URL updates through onUrlChange hook ",
+                                "pr":"[PR#30433]"
+                            }
+                        ]
+                    },
+                    {
+                        "BREAKING CHANGES":[
+                            {
+                                "description":"* Resource `network_port` has been removed ",
+                                "pr":"[PR#30444]"
+                            }
+                        ]
+                    },
+                    {
+                        "FEATURES":[
+                            {
+                                "description":"* add ability to watch for AngularJS URL updates through onUrlChange hook ",
+                                "pr":"[PR#30455]"
+                            }
+                        ]
+                    },
+                    {
+                        "IMPROVEMENTS":[
+                            {
+                                "description":"* Add `ATTRIBUTE` argument (support X new functionality) ",
+                                "pr":"[PR#30411]"
+                            },
+                            {
+                                "description":"* use shared DomElementSchemaRegistry instance ",
+                                "pr":"[PR#30406, PR#30433]"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "version":"0.2.0",
+                "date":"2017-06-20",
+                "changes":[
+                    {
+                        "FEATURES":[
+                            {
+                                "description":"* stricter types for SlicePipe ",
+                                "pr":"[PR#30451]"
+                            },
+                            {
+                                "description":"* Implement definitionAndBoundSpan ",
+                                "pr":"[PR#30401]"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
 ```
 ### Info
 * Install npm packages
