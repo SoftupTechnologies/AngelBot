@@ -9,6 +9,7 @@ module.exports = function parseInput(textInput) {
             if (!parser.results[0]) {
                 throw new Error("Not complete!");
             }
+            console.log(JSON.stringify(parser.results[0]));
             console.log(parser.results[0]);
             return (parser.results[0]);
         } catch (e) {
