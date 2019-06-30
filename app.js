@@ -19,7 +19,7 @@ app.post('/api/v1/parse', (req, res) => {
     const parsed = parseInput(content);
     return res.status(201).send({
         success: 'true',
-        message: 'parsed message: ' + parsed
+        message: parsed
     })
 });
 

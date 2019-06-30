@@ -27,26 +27,35 @@ const lexer = moo.compile({
     },
 });
 
+let extract = (x) => {
+  return x.reduce((accumulator, current) =>
+    Object.assign(accumulator, current)  
+  , Object.create(null) );
+}
+
 %}
 
 @lexer lexer
 
-MAIN -> WS:* REST WS:*                                              {% function(d) { return Object.assign({}, d[1]); } %}
+MAIN -> WS:* REST WS:*                                              {% function(d) { return {changelog:d[1]}; } %}
 REST -> FIRST WS:* REST                                             {% function(d) { return [d[0], ... d[2]]; } %}
         | null
 
-FIRST -> HEADER WS:* CHANGES                                        {% function(d) { return [d[0], ...d[2]]; } %}
+FIRST -> HEADER WS:* CHANGES                                        {% function(d) { return Object.assign(d[0],{changes:d[2]}); } %}
 
-CHANGES -> %CATEGORY WS:* %COLON WS:* ENTRIES WS:* CHANGES          {% function(d) { return [[{"category":d[0], "entries": d[4]}], ...d[6]]; } %}
-            | null
+CHANGES -> CATEGORY_ENTRIES WS:* CHANGES                            {% function(d) { return [d[0], ...d[2]]; } %}
+          | null
 
-HEADER -> %HASH %HASH WS:* %VERSION WS:* DATE_REL WS:*              {% function(d) { return {"version":d[3], "date":d[5]};} %}
+CATEGORY_ENTRIES -> %CATEGORY WS:* %COLON WS:* ENTRIES              {% function(d) { return {[d[0]]: [...d[4]]}; } %}              
+
+
+HEADER -> %HASH %HASH WS:* %VERSION WS:* DATE_REL WS:*              {% function(d) { return {version:d[3].toString(), date:d[5].toString()};} %}
 DATE_REL -> %PAR_L WS:* DATE WS:* %PAR_R                            {% function(d) { return d[2];} %}
 
 ENTRIES -> ENTRY WS:* ENTRIES                                       {% function(d) { return [d[0], ...d[2]];} %}
             | null
 
-ENTRY -> %DESCRPT WS:* %PR                                          {% function(d) { return {"description":d[0], "pr":d[2]}; } %}
+ENTRY -> %DESCRPT WS:* %PR                                          {% function(d) { return {description:d[0].toString(), pr:d[2].toString()}; } %}
 
 DATE -> %DATE                                                       {% function(d) { return d[0]; } %}
       | %UNRELEASED                                                 {% function(d) { return d[0]; } %}

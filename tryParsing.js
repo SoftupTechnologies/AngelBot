@@ -1,5 +1,7 @@
 const nearley = require("nearley");
 const grammar = require("./grammar/grammar.js");
+// Load the full build.
+var _ = require('lodash');
 
 module.exports = function parseInput(textInput) {
     if (textInput.length) {
@@ -9,9 +11,9 @@ module.exports = function parseInput(textInput) {
             if (!parser.results[0]) {
                 throw new Error("Not complete!");
             }
-            console.log(JSON.stringify(parser.results[0]));
-            console.log(parser.results[0]);
-            return (parser.results[0]);
+            let returnedResult = parser.results[0];
+            console.log(JSON.stringify(returnedResult));
+            return (returnedResult);
         } catch (e) {
             return ("Input is not well formed! " + e);
         }

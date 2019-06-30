@@ -26,3 +26,10 @@ FEATURES:
 
 * stricter types for SlicePipe [PR#30451]
 * Implement definitionAndBoundSpan [PR#30401]
+
+## 0.1.12 (2016-06-20)
+
+FEATURES:
+
+* blablabla [PR#30451]
+* Implement definitionAndBoundSpan [PR#30401]
