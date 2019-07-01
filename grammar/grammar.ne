@@ -19,12 +19,6 @@ const lexer = moo.compile({
     },
 });
 
-let extract = (x) => {
-  return x.reduce((accumulator, current) =>
-    Object.assign(accumulator, current)  
-  , Object.create(null) );
-}
-
 %}
 
 @lexer lexer
