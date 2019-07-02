@@ -9,15 +9,15 @@ BUG FIXES:
 
 BREAKING CHANGES:
 
-* Resource `network_port` has been removed [PR#30444]
+* Resource `network_port` has been removed
 
 FEATURES:
 
-* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#30451115]
+* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#3045115]
 
 IMPROVEMENTS:
 
-* Add `ATTRIBUTE` argument (support X new functionality) [PR#30411]
+* Add `ATTRIBUTE` argument (support X new functionality)[PR#30411]
 * use shared DomElementSchemaRegistry instance [PR#30406, PR#30433]
 
 ## 0.2.0 (2017.06.20)
