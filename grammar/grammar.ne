@@ -6,8 +6,8 @@ const lexer = moo.compile({
     DATE: {match: /[0-9][0-9][0-9][0-9]?[-/.][0-1][0-9]?[-/.][0-3][0-9]/},
     UNRELEASED : {match: /[Uu]nreleased/},
     CATEGORY: ["BREAKING CHANGES", "NOTES", "FEATURES", ,"ENHANCEMENTS", "BUG FIXES", "IMPROVEMENTS"],
-    PR: {match: /\[[PR#,0-9 ]+\]/, value: s => s.replace(/[\[\]PR#,]/gi, "")},
-    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/, value: s => s.slice(2, -1)},
+    PR: {match: /\[[PR#,0-9 ]+\]/, value: s => s.replace(/[\[\]PR#,]*/gi, "")},
+    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/, value: s => s.replace(/^[\* ]*/gi, "")},
     PAR_L: '(',
     PAR_R: ')',
     COLON: ':',
@@ -41,10 +41,10 @@ DATE_REL -> %PAR_L WS:* DATE WS:* %PAR_R                            {% function(
 ENTRIES -> ENTRY WS:* ENTRIES                                       {% function(d) { return [d[0], ...d[2]];} %}
             | null
 
-ENTRY -> %DESCRPT WS:* %PR                                          {% function(d) { return {description:d[0].toString(), pr:d[2].toString()}; } %}
+ENTRY -> %DESCRPT %PR                                               {% function(d) { return {description:d[0].toString().trim(), pr:d[1].toString()}; } %}
+        | %DESCRPT                                                  {% function(d) { return {description:d[0].toString().trim()}; } %}
 
 DATE -> %DATE                                                       {% function(d) { return new Date (d[0]); } %}
       | %UNRELEASED                                                 {% function(d) { return d[0]; } %}
-
 
 WS -> %WS                                                           {% function(d) { return null; } %}
