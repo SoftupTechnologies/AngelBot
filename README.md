@@ -34,8 +34,7 @@ This is a POC of a parser needed to read changelog files and prepare them for st
           {
             "BREAKING CHANGES":[
               {
-                "description":"Resource `network_port` has been removed",
-                "pr":"30444"
+                "description":"Resource `network_port` has been removed"
               }
             ]
           },
@@ -43,7 +42,7 @@ This is a POC of a parser needed to read changelog files and prepare them for st
             "FEATURES":[
               {
                 "description":"add ability to watch for AngularJS URL updates through onUrlChange hook",
-                "pr":"30451115"
+                "pr":"3045115"
               }
             ]
           },
