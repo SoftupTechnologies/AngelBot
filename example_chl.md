@@ -13,14 +13,14 @@ BREAKING CHANGES:
 
 FEATURES:
 
-* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#30455]
+* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#30451115]
 
 IMPROVEMENTS:
 
 * Add `ATTRIBUTE` argument (support X new functionality) [PR#30411]
 * use shared DomElementSchemaRegistry instance [PR#30406, PR#30433]
 
-## 0.2.0 (2017-06-20)
+## 0.2.0 (2017.06.20)
 
 FEATURES:
 

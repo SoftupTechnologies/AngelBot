@@ -18,44 +18,44 @@ This is a POC of a parser needed to read changelog files and prepare them for st
           {
             "BUG FIXES":[
               {
-                "description":"* fix a problem with router not responding to back button ",
-                "pr":"[PR#30466]"
+                "description":"fix a problem with router not responding to back button",
+                "pr":"30466"
               },
               {
-                "description":"* IE 11 bug can break URL unification when comparing objects ",
-                "pr":"[PR#30422]"
+                "description":"IE 11 bug can break URL unification when comparing objects",
+                "pr":"30422"
               },
               {
-                "description":"* add ability to watch for AngularJS URL updates through onUrlChange hook ",
-                "pr":"[PR#30433]"
+                "description":"add ability to watch for AngularJS URL updates through onUrlChange hook",
+                "pr":"30433"
               }
             ]
           },
           {
             "BREAKING CHANGES":[
               {
-                "description":"* Resource `network_port` has been removed ",
-                "pr":"[PR#30444]"
+                "description":"Resource `network_port` has been removed",
+                "pr":"30444"
               }
             ]
           },
           {
             "FEATURES":[
               {
-                "description":"* add ability to watch for AngularJS URL updates through onUrlChange hook ",
-                "pr":"[PR#30455]"
+                "description":"add ability to watch for AngularJS URL updates through onUrlChange hook",
+                "pr":"30451115"
               }
             ]
           },
           {
             "IMPROVEMENTS":[
               {
-                "description":"* Add `ATTRIBUTE` argument (support X new functionality) ",
-                "pr":"[PR#30411]"
+                "description":"Add `ATTRIBUTE` argument (support X new functionality)",
+                "pr":"30411"
               },
               {
-                "description":"* use shared DomElementSchemaRegistry instance ",
-                "pr":"[PR#30406, PR#30433]"
+                "description":"use shared DomElementSchemaRegistry instance",
+                "pr":"30406 30433"
               }
             ]
           }
@@ -63,17 +63,17 @@ This is a POC of a parser needed to read changelog files and prepare them for st
       },
       {
         "version":"0.2.0",
-        "date":"2017-06-20",
+        "date":"Tue Jun 20 2017 00:00:00 GMT+0200 (Central European Summer Time)",
         "changes":[
           {
             "FEATURES":[
               {
-                "description":"* stricter types for SlicePipe ",
-                "pr":"[PR#30451]"
+                "description":"stricter types for SlicePipe",
+                "pr":"30451"
               },
               {
-                "description":"* Implement definitionAndBoundSpan ",
-                "pr":"[PR#30401]"
+                "description":"Implement definitionAndBoundSpan",
+                "pr":"30401"
               }
             ]
           }
@@ -81,17 +81,17 @@ This is a POC of a parser needed to read changelog files and prepare them for st
       },
       {
         "version":"0.1.12",
-        "date":"2016-06-20",
+        "date":"Mon Jun 20 2016 02:00:00 GMT+0200 (Central European Summer Time)",
         "changes":[
           {
             "FEATURES":[
               {
-                "description":"* blablabla ",
-                "pr":"[PR#30451]"
+                "description":"blablabla",
+                "pr":"30451"
               },
               {
-                "description":"* Implement definitionAndBoundSpan ",
-                "pr":"[PR#30401]"
+                "description":"Implement definitionAndBoundSpan",
+                "pr":"30401"
               }
             ]
           }

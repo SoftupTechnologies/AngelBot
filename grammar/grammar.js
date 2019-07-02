@@ -6,12 +6,12 @@ function id(x) { return x[0]; }
 const moo = require('moo')
 
 const lexer = moo.compile({
-    VERSION: {match: /[0-9]*\.[0-9]*\.[0-9]*/},
-    DATE: {match: /[0-9][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]/},
+    VERSION: {match: /[0-9]?[0-9]\.[0-9]*\.[0-9]*/},
+    DATE: {match: /[0-9][0-9][0-9][0-9]?[-/.][0-1][0-9]?[-/.][0-3][0-9]/},
     UNRELEASED : {match: /[Uu]nreleased/},
     CATEGORY: ["BREAKING CHANGES", "NOTES", "FEATURES", ,"ENHANCEMENTS", "BUG FIXES", "IMPROVEMENTS"],
-    PR: {match: /\[[PR#,0-9 ]+\]/},
-    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/},
+    PR: {match: /\[[PR#,0-9 ]+\]/, value: s => s.replace(/[\[\]PR#,]/gi, "")},
+    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/, value: s => s.slice(2, -1)},
     PAR_L: '(',
     PAR_R: ')',
     COLON: ':',
@@ -66,7 +66,7 @@ var grammar = {
     {"name": "ENTRY$ebnf$1", "symbols": []},
     {"name": "ENTRY$ebnf$1", "symbols": ["ENTRY$ebnf$1", "WS"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "ENTRY", "symbols": [(lexer.has("DESCRPT") ? {type: "DESCRPT"} : DESCRPT), "ENTRY$ebnf$1", (lexer.has("PR") ? {type: "PR"} : PR)], "postprocess": function(d) { return {description:d[0].toString(), pr:d[2].toString()}; }},
-    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return d[0]; }},
+    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return new Date (d[0]); }},
     {"name": "DATE", "symbols": [(lexer.has("UNRELEASED") ? {type: "UNRELEASED"} : UNRELEASED)], "postprocess": function(d) { return d[0]; }},
     {"name": "WS", "symbols": [(lexer.has("WS") ? {type: "WS"} : WS)], "postprocess": function(d) { return null; }}
 ]
