@@ -12,11 +12,7 @@ describe('Parsing tests', () => {
   it('Changelog parsed correctly', async () => {
     const changeLogContent = await readFile(absolutePathChangelog, "utf-8")
     const compareToResultContent = await readFile(absolutePathCompare, "utf-8")
-    
-    let content = []
-    content.push(changeLogContent)
-    content.push(compareToResultContent)
 
-    assert.equal(JSON.stringify(parseInput(content[0])), content[1])
+    assert.equal(JSON.stringify(parseInput(changeLogContent)), compareToResultContent)
   })
 })
