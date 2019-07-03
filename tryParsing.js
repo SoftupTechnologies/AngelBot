@@ -12,7 +12,7 @@ module.exports = function parseInput(textInput) {
                 throw new Error("Not complete!");
             }
             let returnedResult = parser.results[0];
-            console.log(JSON.stringify(returnedResult));
+            //console.log(JSON.stringify(returnedResult));
             return (returnedResult);
         } catch (e) {
             return ("Input is not well formed! " + e);
