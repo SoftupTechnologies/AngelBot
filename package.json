@@ -20,5 +20,8 @@
   "devDependencies": {
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1"
+  },
+  "standard": {
+    "env": [ "mocha" ]
   }
 }
