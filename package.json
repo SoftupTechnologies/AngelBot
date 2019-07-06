@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha",
-    "start": "node_modules/.bin/nodemon app.js --exec babel-node --"
+    "start": "node_modules/.bin/nodemon app.js --exec babel-node --",
+    "convert": "npx nearleyc ./grammar/grammar.ne -o ./grammar/grammar.js"
   },
   "author": "Erald Totraku, Shpëtim Selaci",
   "license": "ISC",
@@ -22,6 +23,8 @@
     "nodemon": "^1.19.1"
   },
   "standard": {
-    "env": [ "mocha" ]
+    "env": [
+      "mocha"
+    ]
   }
 }
