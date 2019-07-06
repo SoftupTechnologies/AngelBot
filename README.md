@@ -102,9 +102,7 @@ This is a POC of a parser needed to read changelog files and prepare them for st
 ```
 ### Info
 * Install npm packages
-* Install nearley js on your machine globally:
-`sudo npm install -g nearley`
 * Compile nearley file to js every time you make changes:
-`nearleyc grammar.ne -o grammar.js`
+`npm run convert`
 * type in your terminal: 
 `npm run start`
