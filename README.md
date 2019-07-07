@@ -1,6 +1,6 @@
 # ~~CH~~<strong style="color: #0095ff">Angel</strong>~~OG~~ <strong style="color: #0095ff">Bot</strong>
 
-This is a POC of a parser needed to read changelog files and prepare them for storage in a database.
+This is work on progress. 🤖
 
 ### example API call:
 `curl -X POST http://localhost:5000/api/v1/parse -d content="content from example_chl.md"`
