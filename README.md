@@ -1,6 +1,6 @@
 # ~~CH~~<strong style="color: #0095ff">Angel</strong>~~OG~~ <strong style="color: #0095ff">Bot</strong>
 
-This is work on progress. 🤖
+This is work in progress. 🤖
 
 ### example API call:
 `curl -X POST http://localhost:5000/api/v1/parse -d content="content from example_chl.md"`
