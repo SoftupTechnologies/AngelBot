@@ -15,7 +15,6 @@ const lexer = moo.compile({
     PAR_L: '(',
     PAR_R: ')',
     COLON: ':',
-    ASTERISK: '*',
     HASH: '#',
     WS: {
       match: /\s+/,
