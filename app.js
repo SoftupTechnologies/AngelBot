@@ -8,11 +8,11 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/api/v1/parse', (req, res) => {
+app.post('/api/v1/changelog', (req, res) => {
   if (!req.body.content) {
     return res.status(400).send({
       success: 'false',
-      message: 'title is required'
+      message: 'content is required'
     })
   }
   let content = req.body.content
