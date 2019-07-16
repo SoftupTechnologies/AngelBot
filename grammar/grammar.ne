@@ -7,7 +7,7 @@ const lexer = moo.compile({
     UNRELEASED : {match: /[Uu]nreleased/},
     CATEGORY: ["BREAKING CHANGES", "NOTES", "FEATURES", ,"ENHANCEMENTS", "BUG FIXES", "IMPROVEMENTS"],
     PR: {match: /\[[PR#,0-9 ]+\]/, value: s => s.replace(/[\[\]PR#,]*/gi, "")},
-    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/, value: s => s.replace(/^[\* ]*/gi, "")},
+    DESCRPT: {match: /\*[\w\(\)\`\´\.'\- ]+/, value: s => s.replace(/^[\* ]*/gi, "")},
     PAR_L: '(',
     PAR_R: ')',
     COLON: ':',
@@ -43,7 +43,7 @@ ENTRIES -> ENTRY WS:* ENTRIES                                       {% function(
 ENTRY -> %DESCRPT %PR                                               {% function(d) { return {description:d[0].toString().trim(), pr:d[1].toString()}; } %}
         | %DESCRPT                                                  {% function(d) { return {description:d[0].toString().trim()}; } %}
 
-DATE -> %DATE                                                       {% function(d) { return new Date (d[0]); } %}
+DATE -> %DATE                                                       {% function(d) { return (new Date (d[0])).toDateString(); } %}
       | %UNRELEASED                                                 {% function(d) { return d[0]; } %}
 
 WS -> %WS                                                           {% function(d) { return null; } %}

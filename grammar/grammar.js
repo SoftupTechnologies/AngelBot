@@ -11,7 +11,7 @@ const lexer = moo.compile({
     UNRELEASED : {match: /[Uu]nreleased/},
     CATEGORY: ["BREAKING CHANGES", "NOTES", "FEATURES", ,"ENHANCEMENTS", "BUG FIXES", "IMPROVEMENTS"],
     PR: {match: /\[[PR#,0-9 ]+\]/, value: s => s.replace(/[\[\]PR#,]*/gi, "")},
-    DESCRPT: {match: /\*[\w\(\)\`\´ ]+/, value: s => s.replace(/^[\* ]*/gi, "")},
+    DESCRPT: {match: /\*[\w\(\)\`\´\.'\- ]+/, value: s => s.replace(/^[\* ]*/gi, "")},
     PAR_L: '(',
     PAR_R: ')',
     COLON: ':',
@@ -64,7 +64,7 @@ var grammar = {
     {"name": "ENTRIES", "symbols": []},
     {"name": "ENTRY", "symbols": [(lexer.has("DESCRPT") ? {type: "DESCRPT"} : DESCRPT), (lexer.has("PR") ? {type: "PR"} : PR)], "postprocess": function(d) { return {description:d[0].toString().trim(), pr:d[1].toString()}; }},
     {"name": "ENTRY", "symbols": [(lexer.has("DESCRPT") ? {type: "DESCRPT"} : DESCRPT)], "postprocess": function(d) { return {description:d[0].toString().trim()}; }},
-    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return new Date (d[0]); }},
+    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return (new Date (d[0])).toDateString(); }},
     {"name": "DATE", "symbols": [(lexer.has("UNRELEASED") ? {type: "UNRELEASED"} : UNRELEASED)], "postprocess": function(d) { return d[0]; }},
     {"name": "WS", "symbols": [(lexer.has("WS") ? {type: "WS"} : WS)], "postprocess": function(d) { return null; }}
 ]
