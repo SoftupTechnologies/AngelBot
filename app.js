@@ -18,26 +18,29 @@ app.post('/api/v1/changelog', (req, res) => {
   }
   let content = req.body.content;
   const parsed = parseInput(content);
-  storeChangelog(parsed);
-  return res.status(201).send({
-    success: 'true',
-    message: parsed
-  });
-});
-
-app.get('/api/v1/changelog', async (req, res) => {
-  /* let content = req.body.content; */
   try {
-    return res.status(201).send({
-      success: 'true',
-      message: await readChangelog()
+    storeChangelog(parsed).then((answer) => {
+      return res.status(201).send({
+        success: 'true',
+        message: answer
+      });
     });
-  } catch (error) {
+  } catch (e) {
     return res.status(400).send({
       success: 'false',
-      message: 'failed'
+      message: e
     });
   }
+});
+
+app.get('/api/v1/changelog', (req, res) => {
+  /* let content = req.body.content; */
+  readChangelog().then((answer) => {
+    return res.status(201).send({
+      success: 'true',
+      message: answer
+    });
+  });
 });
 
 app.post('/api/v1/init', (req, res) => {

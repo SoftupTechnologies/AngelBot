@@ -6,41 +6,30 @@ AWS.config.update({
   endpoint: config.endpoint
 });
 
-let storeChangelog = async content => {
+let storeChangelog = async (content) => {
   let docClient = new AWS.DynamoDB.DocumentClient();
   let params = {
     TableName: config.changelogsTable,
     Item: content.changelog[0]
   };
-
-  docClient.put(params, function (err, data) {
-    if (err) {
-      console.error(
-        'Unable to add item. Error JSON:',
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log('Added item:', JSON.stringify(data, null, 2));
-    }
-  });
+  try {
+    docClient.put(params).promise();
+    return 'success';
+  } catch (error) {
+    return error;
+  }
 };
 
 let readChangelog = async () => {
+  let docClient = new AWS.DynamoDB.DocumentClient();
   let params = {
     TableName: config.changelogsTable
   };
-
-  let docClient = new AWS.DynamoDB.DocumentClient();
-
-  return new Promise((resolve, reject) => {
-    docClient.scan(params, (err, data) => {
-      if (err) {
-        return resolve(JSON.stringify(err, null, 2));
-      } else {
-        return resolve(data);
-      }
-    });
-  });
+  try {
+    return docClient.scan(params).promise();
+  } catch (error) {
+    return error;
+  }
 };
 
 let initializeDatabase = async () => {
