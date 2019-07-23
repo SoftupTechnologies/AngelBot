@@ -17,6 +17,7 @@ app.post('/api/v1/changelog', (req, res) => {
     });
   }
   let content = req.body.content;
+  // TODO handle parseInput() in an asynchronous way
   const parsed = parseInput(content);
   try {
     storeChangelog(parsed).then(() => {
