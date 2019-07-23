@@ -13,8 +13,7 @@ let storeChangelog = async (content) => {
     Item: content.changelog[0]
   };
   try {
-    docClient.put(params).promise();
-    return 'success';
+    return docClient.put(params).promise();
   } catch (error) {
     return error;
   }

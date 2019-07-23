@@ -19,10 +19,10 @@ app.post('/api/v1/changelog', (req, res) => {
   let content = req.body.content;
   const parsed = parseInput(content);
   try {
-    storeChangelog(parsed).then((answer) => {
+    storeChangelog(parsed).then(() => {
       return res.status(201).send({
         success: 'true',
-        message: answer
+        message: 'success'
       });
     });
   } catch (e) {
