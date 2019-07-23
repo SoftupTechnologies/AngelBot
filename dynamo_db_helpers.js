@@ -13,7 +13,6 @@ let storeChangelog = async content => {
     Item: content.changelog[0]
   };
 
-  console.log('Adding a new item...');
   docClient.put(params, function (err, data) {
     if (err) {
       console.error(
