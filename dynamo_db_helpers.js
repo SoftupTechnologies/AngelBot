@@ -51,16 +51,11 @@ let exampleBugfixes = async () => {
 
 let initializeDatabase = async () => {
   let dynamodb = new AWS.DynamoDB();
-
-  dynamodb.createTable(config.initParams, function (err, data) {
-    if (err) {
-      return ('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
-    } else {
-      return (
-        'Created table. Table description JSON:', JSON.stringify(data, null, 2)
-      );
-    }
-  });
+  try {
+    return dynamodb.createTable(config.initParams).promise();
+  } catch (error) {
+    return error;
+  }
 };
 
 module.exports = {

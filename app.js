@@ -19,47 +19,69 @@ app.post('/api/v1/changelog', (req, res) => {
   let content = req.body.content;
   // TODO handle parseInput() in an asynchronous way
   const parsed = parseInput(content);
-  try {
-    storeChangelog(parsed).then(() => {
+  storeChangelog(parsed)
+    .then((answer) => {
       return res.status(201).send({
         success: 'true',
-        message: 'success'
+        message: 'Added successfully!'
+      });
+    })
+    .catch(() => {
+      return res.status(400).send({
+        success: 'false',
+        message: 'Couldn\'t add item! This version might already exist with different data!'
       });
     });
-  } catch (e) {
-    return res.status(400).send({
-      success: 'false',
-      message: e
-    });
-  }
 });
 
 app.get('/api/v1/changelog', (req, res) => {
   /* let content = req.body.content; */
-  readChangelog().then((answer) => {
-    return res.status(201).send({
-      success: 'true',
-      message: answer
+  readChangelog()
+    .then((answer) => {
+      return res.status(201).send({
+        success: 'true',
+        message: answer
+      });
+    })
+    .catch((answer) => {
+      return res.status(400).send({
+        success: 'false',
+        message: answer
+      });
     });
-  });
 });
 
 app.get('/api/v1/changelog/exampleBugfixes', (req, res) => {
   /* let content = req.body.content; */
-  exampleBugfixes().then((answer) => {
-    return res.status(201).send({
-      success: 'true',
-      message: answer
+  exampleBugfixes()
+    .then((answer) => {
+      return res.status(201).send({
+        success: 'true',
+        message: answer
+      });
+    })
+    .catch((answer) => {
+      return res.status(400).send({
+        success: 'false',
+        message: answer
+      });
     });
-  });
 });
 
 app.post('/api/v1/init', (req, res) => {
-  let msg = initializeDatabase();
-  return res.status(201).send({
-    success: 'true',
-    message: msg
-  });
+  initializeDatabase()
+    .then((answer) => {
+      return res.status(201).send({
+        success: 'true',
+        message: answer
+      });
+    })
+    .catch((answer) => {
+      return res.status(400).send({
+        success: 'false',
+        message: answer
+      });
+    });
 });
 
 const PORT = 5000;
