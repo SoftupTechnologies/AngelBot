@@ -35,6 +35,7 @@ let exampleBugfixes = async () => {
   let docClient = new AWS.DynamoDB.DocumentClient();
   let params = {
     TableName: config.changelogsTable,
+    FilterExpression: 'attribute_exists(#bf)',
     ProjectionExpression: '#version, #bf',
     ExpressionAttributeNames: {
       '#bf': 'BUG FIXES',
