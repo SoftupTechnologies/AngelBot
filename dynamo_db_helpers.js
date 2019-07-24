@@ -31,6 +31,23 @@ let readChangelog = async () => {
   }
 };
 
+let exampleBugfixes = async () => {
+  let docClient = new AWS.DynamoDB.DocumentClient();
+  let params = {
+    TableName: config.changelogsTable,
+    ProjectionExpression: '#version, #bf',
+    ExpressionAttributeNames: {
+      '#bf': 'BUG FIXES',
+      '#version': 'version'
+    }
+  };
+  try {
+    return docClient.scan(params).promise();
+  } catch (error) {
+    return error;
+  }
+};
+
 let initializeDatabase = async () => {
   let dynamodb = new AWS.DynamoDB();
 
@@ -48,5 +65,6 @@ let initializeDatabase = async () => {
 module.exports = {
   storeChangelog: storeChangelog,
   initializeDatabase: initializeDatabase,
-  readChangelog: readChangelog
+  readChangelog: readChangelog,
+  exampleBugfixes: exampleBugfixes
 };

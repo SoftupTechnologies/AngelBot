@@ -36,7 +36,7 @@ var grammar = {
     {"name": "REST", "symbols": []},
     {"name": "FIRST$ebnf$1", "symbols": []},
     {"name": "FIRST$ebnf$1", "symbols": ["FIRST$ebnf$1", "WS"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "FIRST", "symbols": ["HEADER", "FIRST$ebnf$1", "CHANGES"], "postprocess": function(d) { return Object.assign(d[0],{changes:d[2]}); }},
+    {"name": "FIRST", "symbols": ["HEADER", "FIRST$ebnf$1", "CHANGES"], "postprocess": function(d) { return Object.assign(d[0],...d[2]); }},
     {"name": "CHANGES$ebnf$1", "symbols": []},
     {"name": "CHANGES$ebnf$1", "symbols": ["CHANGES$ebnf$1", "WS"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "CHANGES", "symbols": ["CATEGORY_ENTRIES", "CHANGES$ebnf$1", "CHANGES"], "postprocess": function(d) { return [d[0], ...d[2]]; }},

@@ -26,7 +26,7 @@ MAIN -> WS:* REST WS:*                                              {% function(
 REST -> FIRST WS:* REST                                             {% function(d) { return [d[0], ... d[2]]; } %}
         | null
 
-FIRST -> HEADER WS:* CHANGES                                        {% function(d) { return Object.assign(d[0],{changes:d[2]}); } %}
+FIRST -> HEADER WS:* CHANGES                                        {% function(d) { return Object.assign(d[0],...d[2]); } %}
 
 CHANGES -> CATEGORY_ENTRIES WS:* CHANGES                            {% function(d) { return [d[0], ...d[2]]; } %}
           | null
