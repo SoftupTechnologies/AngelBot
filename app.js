@@ -20,7 +20,7 @@ app.post('/api/v1/changelog', (req, res) => {
   // TODO handle parseInput() in an asynchronous way
   const parsed = parseInput(content);
   storeChangelog(parsed)
-    .then((answer) => {
+    .then(() => {
       return res.status(201).send({
         success: 'true',
         message: 'Added successfully!'
