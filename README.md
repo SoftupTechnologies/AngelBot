@@ -3,21 +3,21 @@
 This is work in progress. 🤖
 
 ### API calls:
- 
-`
-POST /api/v1/changelog
-`
-to store a new changelog
-
 `
 GET /api/v1/changelog
 `
 to get all changelogs
+ 
+`
+POST /api/v1/changelog content=''
+`
+to store a new changelog
+
 
 `
-GET /api/v1/exampleBugfixes
+GET /api/v1/category_changes category=''
 `
-to get bugfixes 
+to get the all changes from a category including the version for each e.g. 'BUG FIXES'
 
 `
 POST /api/v1/init
