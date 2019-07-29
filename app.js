@@ -51,7 +51,7 @@ app.get('/api/v1/changelog', (req, res) => {
     });
 });
 
-app.get('/api/v1/changelog/getCategoryChanges', (req, res) => {
+app.get('/api/v1/changelog/category_changes', (req, res) => {
   if (!req.body.category) {
     return res.status(400).send({
       success: 'false',
