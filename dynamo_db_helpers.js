@@ -35,7 +35,7 @@ let readChangelog = async () => {
   return data;
 };
 
-let categoryChanges = async (category) => {
+let readCategoryChanges = async (category) => {
   let docClient = new AWS.DynamoDB.DocumentClient();
   let categoryName = category;
   let params = {
@@ -71,5 +71,5 @@ module.exports = {
   storeChangelog: storeChangelog,
   initializeDatabase: initializeDatabase,
   readChangelog: readChangelog,
-  categoryChanges: categoryChanges
+  readCategoryChanges: readCategoryChanges
 };

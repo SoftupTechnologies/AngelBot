@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import parseInput from './tryParsing';
-import { storeChangelog, initializeDatabase, readChangelog, categoryChanges } from './dynamo_db_helpers';
+import { storeChangelog, initializeDatabase, readChangelog, readCategoryChanges } from './dynamo_db_helpers';
 
 const app = express();
 
@@ -59,7 +59,7 @@ app.get('/api/v1/changelog/category_changes', (req, res) => {
     });
   }
   let category = req.body.category;
-  categoryChanges(category)
+  readCategoryChanges(category)
     .then((data) => {
       return res.status(201).send({
         success: 'true',
