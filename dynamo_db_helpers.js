@@ -12,11 +12,13 @@ let storeChangelog = async (content) => {
     TableName: config.changelogsTable,
     Item: content.changelog[0]
   };
+  let data;
   try {
-    return docClient.put(params).promise();
+    data = await docClient.put(params).promise();
   } catch (error) {
     return error;
   }
+  return data;
 };
 
 let readChangelog = async () => {
@@ -24,11 +26,13 @@ let readChangelog = async () => {
   let params = {
     TableName: config.changelogsTable
   };
+  let data;
   try {
-    return docClient.scan(params).promise();
+    data = await docClient.scan(params).promise();
   } catch (error) {
     return error;
   }
+  return data;
 };
 
 let exampleBugfixes = async () => {
@@ -42,20 +46,24 @@ let exampleBugfixes = async () => {
       '#version': 'version'
     }
   };
+  let data;
   try {
-    return docClient.scan(params).promise();
+    data = await docClient.scan(params).promise();
   } catch (error) {
     return error;
   }
+  return data;
 };
 
 let initializeDatabase = async () => {
   let dynamodb = new AWS.DynamoDB();
+  let data;
   try {
-    return dynamodb.createTable(config.initParams).promise();
+    data = await dynamodb.createTable(config.initParams).promise();
   } catch (error) {
     return error;
   }
+  return data;
 };
 
 module.exports = {

@@ -20,16 +20,16 @@ app.post('/api/v1/changelog', (req, res) => {
   // TODO handle parseInput() in an asynchronous way
   const parsed = parseInput(content);
   storeChangelog(parsed)
-    .then(() => {
+    .then((answer) => {
       return res.status(201).send({
         success: 'true',
-        message: 'Added successfully!'
+        message: answer
       });
     })
-    .catch(() => {
+    .catch((error) => {
       return res.status(400).send({
         success: 'false',
-        message: 'Couldn\'t add item! This version might already exist with different data!'
+        message: error
       });
     });
 });
