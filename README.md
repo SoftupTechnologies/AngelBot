@@ -3,12 +3,12 @@
 This is work in progress. 🤖
 
 ## API calls:
-### Get all changelogs
+#### Get all changelogs
 ```
 curl --request GET \
   --url http://localhost:5000/api/v1/changelog
 ```
-### Store a new changelog
+#### Store a new changelog
 ```
 curl --request POST \
   --url http://localhost:5000/api/v1/changelog \
@@ -16,14 +16,14 @@ curl --request POST \
   --data 'content= changelog'
 ```
 
-### To get the all changes from a category including the version for each e.g. 'BUG FIXES'
+#### To get the all changes from a category including the version for each e.g. 'BUG FIXES'
 ```
 curl --request GET \
   --url http://localhost:5000/api/v1/changelog/category_changes \
   --header 'content-type: application/x-www-form-urlencoded' \
   --data 'category=BUG FIXES'
 ```
-### Initialize the changelogs table
+#### Initialize the changelogs table
 
 ```
 curl --request POST \
