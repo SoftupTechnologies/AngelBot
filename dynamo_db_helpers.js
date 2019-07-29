@@ -35,14 +35,15 @@ let readChangelog = async () => {
   return data;
 };
 
-let exampleBugfixes = async () => {
+let categoryChanges = async (category) => {
   let docClient = new AWS.DynamoDB.DocumentClient();
+  let categoryName = category;
   let params = {
     TableName: config.changelogsTable,
-    FilterExpression: 'attribute_exists(#bf)',
-    ProjectionExpression: '#version, #bf',
+    FilterExpression: 'attribute_exists(#category)',
+    ProjectionExpression: '#version, #category',
     ExpressionAttributeNames: {
-      '#bf': 'BUG FIXES',
+      '#category': categoryName,
       '#version': 'version'
     }
   };
@@ -70,5 +71,5 @@ module.exports = {
   storeChangelog: storeChangelog,
   initializeDatabase: initializeDatabase,
   readChangelog: readChangelog,
-  exampleBugfixes: exampleBugfixes
+  categoryChanges: categoryChanges
 };

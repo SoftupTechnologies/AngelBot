@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import parseInput from './tryParsing';
-import { storeChangelog, initializeDatabase, readChangelog, exampleBugfixes } from './dynamo_db_helpers';
+import { storeChangelog, initializeDatabase, readChangelog, categoryChanges } from './dynamo_db_helpers';
 
 const app = express();
 
@@ -51,19 +51,25 @@ app.get('/api/v1/changelog', (req, res) => {
     });
 });
 
-app.get('/api/v1/changelog/exampleBugfixes', (req, res) => {
-  /* let content = req.body.content; */
-  exampleBugfixes()
-    .then((answer) => {
+app.get('/api/v1/changelog/getCategoryChanges', (req, res) => {
+  if (!req.body.category) {
+    return res.status(400).send({
+      success: 'false',
+      message: 'category is required'
+    });
+  }
+  let category = req.body.category;
+  categoryChanges(category)
+    .then((data) => {
       return res.status(201).send({
         success: 'true',
-        message: answer
+        message: data
       });
     })
-    .catch((answer) => {
+    .catch((data) => {
       return res.status(400).send({
         success: 'false',
-        message: answer
+        message: data
       });
     });
 });
