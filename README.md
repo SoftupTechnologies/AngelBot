@@ -2,27 +2,34 @@
 
 This is work in progress. 🤖
 
-### API calls:
-`
-GET /api/v1/changelog
-`
-to get all changelogs
- 
-`
-POST /api/v1/changelog content=''
-`
-to store a new changelog
+## API calls:
+### Get all changelogs
+```
+curl --request GET \
+  --url http://localhost:5000/api/v1/changelog
+```
+### Store a new changelog
+```
+curl --request POST \
+  --url http://localhost:5000/api/v1/changelog \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data 'content= changelog'
+```
 
+### To get the all changes from a category including the version for each e.g. 'BUG FIXES'
+```
+curl --request GET \
+  --url http://localhost:5000/api/v1/changelog/category_changes \
+  --header 'content-type: application/x-www-form-urlencoded' \
+  --data 'category=BUG FIXES'
+```
+### Initialize the changelogs table
 
-`
-GET /api/v1/category_changes category=''
-`
-to get the all changes from a category including the version for each e.g. 'BUG FIXES'
+```
+curl --request POST \
+  --url http://localhost:5000/api/v1/init
+```
 
-`
-POST /api/v1/init
-`
-to initialize the changelogs table
 
 ### Info
 * Install npm packages
