@@ -5,6 +5,22 @@ import { storeChangelog, initializeDatabase, readChangelog, readCategoryChanges 
 
 const app = express();
 
+let handleFunc = (func, res) => {
+  func
+    .then((data) => {
+      return res.status(201).send({
+        success: 'true',
+        message: data
+      });
+    })
+    .catch((error) => {
+      return res.status(400).send({
+        success: 'false',
+        message: error
+      });
+    });
+};
+
 // Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,36 +35,18 @@ app.post('/api/v1/changelog', (req, res) => {
   let content = req.body.content;
   // TODO handle parseInput() in an asynchronous way
   const parsed = parseInput(content);
-  storeChangelog(parsed)
-    .then((answer) => {
-      return res.status(201).send({
-        success: 'true',
-        message: answer
-      });
-    })
-    .catch((error) => {
-      return res.status(400).send({
-        success: 'false',
-        message: error
-      });
-    });
+  handleFunc(storeChangelog(parsed), res);
 });
 
 app.get('/api/v1/changelog', (req, res) => {
-  /* let content = req.body.content; */
-  readChangelog()
-    .then((answer) => {
-      return res.status(201).send({
-        success: 'true',
-        message: answer
-      });
-    })
-    .catch((answer) => {
-      return res.status(400).send({
-        success: 'false',
-        message: answer
-      });
-    });
+  // when version is passed, the changelog with that specific version is returned
+  // otherwise all changelogs are returnd
+  if (req.body.version) {
+    let version = req.body.version;
+    handleFunc(readChangelog(version), res);
+  } else {
+    handleFunc(readChangelog(), res);
+  }
 });
 
 app.get('/api/v1/changelog/category_changes', (req, res) => {
@@ -59,35 +57,11 @@ app.get('/api/v1/changelog/category_changes', (req, res) => {
     });
   }
   let category = req.body.category;
-  readCategoryChanges(category)
-    .then((data) => {
-      return res.status(201).send({
-        success: 'true',
-        message: data
-      });
-    })
-    .catch((data) => {
-      return res.status(400).send({
-        success: 'false',
-        message: data
-      });
-    });
+  handleFunc(readCategoryChanges(category), res);
 });
 
 app.post('/api/v1/init', (req, res) => {
-  initializeDatabase()
-    .then((answer) => {
-      return res.status(201).send({
-        success: 'true',
-        message: answer
-      });
-    })
-    .catch((answer) => {
-      return res.status(400).send({
-        success: 'false',
-        message: answer
-      });
-    });
+  handleFunc(initializeDatabase(), res);
 });
 
 const PORT = 5000;

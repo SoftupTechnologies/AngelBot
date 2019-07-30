@@ -21,11 +21,23 @@ let storeChangelog = async (content) => {
   return data;
 };
 
-let readChangelog = async () => {
+let readChangelog = async (vers) => {
   let docClient = new AWS.DynamoDB.DocumentClient();
-  let params = {
-    TableName: config.changelogsTable
-  };
+  let params;
+  if (vers) {
+    params = {
+      TableName: config.changelogsTable,
+      FilterExpression: '#version = :vers',
+      ExpressionAttributeNames: {
+        '#version': 'version'
+      },
+      ExpressionAttributeValues: {
+        ':vers': vers
+      }
+    };
+  } else {
+    params = { TableName: config.changelogsTable };
+  }
   let data;
   try {
     data = await docClient.scan(params).promise();
