@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import parseInput from './tryParsing';
+import parseInput from './parse_changelog';
 import { storeChangelog, initializeDatabase, readChangelog, readCategoryChanges } from './dynamo_db_helpers';
 
 const app = express();
@@ -33,9 +33,15 @@ app.post('/api/v1/changelog', (req, res) => {
     });
   }
   let content = req.body.content;
-  // TODO handle parseInput() in an asynchronous way
-  const parsed = parseInput(content);
-  handleFunc(storeChangelog(parsed), res);
+  try {
+    let parsed = parseInput(content);
+    handleFunc(storeChangelog(parsed), res);
+  } catch (error) {
+    return res.status(400).send({
+      success: 'false',
+      message: error.toString()
+    });
+  }
 });
 
 app.get('/api/v1/changelog', (req, res) => {
