@@ -24,7 +24,7 @@ const lexer = moo.compile({
 
 MAIN -> WS:* REST WS:*                                              {% function(d) { return {changelog:d[1]}; } %}
 
-REST -> FIRST WS:* REST                                             {% function(d) { return [d[0], ...d[2]]; } %}
+REST -> FIRST REST                                                  {% function(d) { return [d[0], ...d[1]]; } %}
         | null
 
 FIRST -> HEADER WS:* CHANGES                                        {% function(d) { return Object.assign(d[0], ...d[2]); } %}
