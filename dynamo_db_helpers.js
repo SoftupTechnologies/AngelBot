@@ -53,10 +53,11 @@ let readCategoryChanges = async (category) => {
   let params = {
     TableName: config.changelogsTable,
     FilterExpression: 'attribute_exists(#category)',
-    ProjectionExpression: '#version, #category',
+    ProjectionExpression: '#version, #date, #category',
     ExpressionAttributeNames: {
       '#category': categoryName,
-      '#version': 'version'
+      '#version': 'version',
+      '#date': 'date'
     }
   };
   let data;
@@ -68,7 +69,7 @@ let readCategoryChanges = async (category) => {
   return data;
 };
 
-let initializeDatabase = async () => {
+let createChangelogTable = async () => {
   let dynamodb = new AWS.DynamoDB();
   let data;
   try {
@@ -81,7 +82,7 @@ let initializeDatabase = async () => {
 
 module.exports = {
   storeChangelog: storeChangelog,
-  initializeDatabase: initializeDatabase,
+  createChangelogTable: createChangelogTable,
   readChangelog: readChangelog,
   readCategoryChanges: readCategoryChanges
 };
