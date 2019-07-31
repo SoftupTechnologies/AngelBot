@@ -2,7 +2,7 @@ const nearley = require('nearley');
 const grammar = require('./grammar/grammar.js');
 
 module.exports = function parseInput (textInput) {
-  if (textInput.length) {
+  if (textInput.trim().length) {
     const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
     parser.feed(textInput);
     if (!parser.results[0]) {
@@ -11,6 +11,6 @@ module.exports = function parseInput (textInput) {
     let returnedResult = parser.results[0];
     return returnedResult;
   } else {
-    return null;
+    throw new Error('Empty input!');
   }
 };
