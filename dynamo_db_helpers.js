@@ -10,6 +10,8 @@ let storeChangelog = async (content) => {
   let docClient = new AWS.DynamoDB.DocumentClient();
   let params = {
     TableName: config.changelogsTable,
+    // TODO it is useful to check which versions do not exist in the DB
+    // then store the non existing changelogs
     Item: content.changelog[0]
   };
   let data;
