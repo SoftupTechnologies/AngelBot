@@ -37,5 +37,6 @@ curl --request POST \
 * Install npm packages
 * Compile nearley file to js every time you make changes:
 `npm run convert`
+* Or type `npm run watch` to let the compilation run automatically when changes to grammar.ne are made
 * type in your terminal: 
 `npm run start`
