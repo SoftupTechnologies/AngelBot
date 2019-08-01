@@ -6,9 +6,9 @@ AWS.config.update({
   endpoint: config.endpoint
 });
 
-let storeChangelog = async (content) => {
-  let docClient = new AWS.DynamoDB.DocumentClient();
-  let params = {
+const storeChangelog = async (content) => {
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const params = {
     TableName: config.changelogsTable,
     // TODO it is useful to check which versions do not exist in the DB
     // then store the non existing changelogs
@@ -23,8 +23,8 @@ let storeChangelog = async (content) => {
   return data;
 };
 
-let readChangelog = async (vers) => {
-  let docClient = new AWS.DynamoDB.DocumentClient();
+const readChangelog = async (vers) => {
+  const docClient = new AWS.DynamoDB.DocumentClient();
   let params;
   if (vers) {
     params = {
@@ -49,10 +49,10 @@ let readChangelog = async (vers) => {
   return data;
 };
 
-let readCategoryChanges = async (category) => {
-  let docClient = new AWS.DynamoDB.DocumentClient();
-  let categoryName = category;
-  let params = {
+const readCategoryChanges = async (category) => {
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const categoryName = category;
+  const params = {
     TableName: config.changelogsTable,
     FilterExpression: 'attribute_exists(#category)',
     ProjectionExpression: '#version, #date, #category',
@@ -71,8 +71,8 @@ let readCategoryChanges = async (category) => {
   return data;
 };
 
-let createChangelogTable = async () => {
-  let dynamodb = new AWS.DynamoDB();
+const createChangelogTable = async () => {
+  const dynamodb = new AWS.DynamoDB();
   let data;
   try {
     data = await dynamodb.createTable(config.initParams).promise();

@@ -1,8 +1,8 @@
-let region = 'us-west-2';
-let endpoint = 'http://localhost:8000';
-let changelogsTable = 'Changelogs';
+const region = 'us-west-2';
+const endpoint = 'http://localhost:8000';
+const changelogsTable = 'Changelogs';
 
-let initParams = {
+const initParams = {
   TableName: changelogsTable,
   KeySchema: [
     { AttributeName: 'version', KeyType: 'HASH' }

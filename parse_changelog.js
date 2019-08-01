@@ -8,7 +8,7 @@ module.exports = function parseInput (textInput) {
     if (!parser.results[0]) {
       throw new Error('Not complete!');
     }
-    let returnedResult = parser.results[0];
+    const returnedResult = parser.results[0];
     return returnedResult;
   } else {
     throw new Error('Empty input!');

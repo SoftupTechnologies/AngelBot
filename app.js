@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // func is an async function and e.g. does CRUD operations
-let handleFunc = (func, res) => {
+const handleFunc = (func, res) => {
   func
     .then((data) => {
       return res.status(201).send({
@@ -35,9 +35,9 @@ app.post('/api/v1/changelog', (req, res) => {
       message: 'content is required'
     });
   }
-  let content = req.body.content;
+  const content = req.body.content;
   try {
-    let parsed = parseInput(content);
+    const parsed = parseInput(content);
     handleFunc(storeChangelog(parsed), res);
   } catch (error) {
     return res.status(400).send({
@@ -50,7 +50,7 @@ app.post('/api/v1/changelog', (req, res) => {
 // Get all changelogs or get specific changelog if the version parameter is passed
 app.get('/api/v1/changelog', (req, res) => {
   if (req.body.version) {
-    let version = req.body.version;
+    const version = req.body.version;
     handleFunc(readChangelog(version), res);
   } else {
     handleFunc(readChangelog(), res);
@@ -65,7 +65,7 @@ app.get('/api/v1/changelog/category_changes', (req, res) => {
       message: 'category is required'
     });
   }
-  let category = req.body.category;
+  const category = req.body.category;
   handleFunc(readCategoryChanges(category), res);
 });
 
