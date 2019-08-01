@@ -6,17 +6,60 @@ AWS.config.update({
   endpoint: config.endpoint
 });
 
-const storeChangelog = async (content) => {
+const getStoredVersions = async () => {
   const docClient = new AWS.DynamoDB.DocumentClient();
   const params = {
     TableName: config.changelogsTable,
-    // TODO it is useful to check which versions do not exist in the DB
-    // then store the non existing changelogs
-    Item: content.changelog[0]
+    ProjectionExpression: '#version',
+    ExpressionAttributeNames: {
+      '#version': 'version'
+    }
   };
   let data;
   try {
-    data = await docClient.put(params).promise();
+    data = await docClient.scan(params).promise();
+  } catch (error) {
+    return error;
+  }
+  return onlyVersionsArray(data.Items);
+};
+
+const onlyVersionsArray = (arr) => {
+  return arr.reduce((acc, current) => {
+    return acc.concat(current.version);
+  }, []);
+};
+
+const findNonExisting = (fromRequest, fromDatabase) => {
+  return fromRequest.reduce((accumulator, current) => {
+    if ((fromDatabase).includes(current.version)) {
+      return accumulator;
+    } else {
+      accumulator.push(current);
+      return accumulator;
+    }
+  }, []);
+};
+
+const formatBatchDynamo = (arr) => {
+  const putRequests =
+  arr.reduce((accumulator, current) => {
+    return accumulator.concat({ PutRequest: { Item: current } });
+  }, []);
+  return { RequestItems: { [config.changelogsTable]: putRequests } };
+};
+
+const storeChangelog = async (content) => {
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const versionsInDatabase = await getStoredVersions();
+  const notInDatabase = findNonExisting(content.changelog, versionsInDatabase);
+  if (!notInDatabase.length) {
+    return ('All of these versions already exist!');
+  }
+  const readyForBatchStore = formatBatchDynamo(notInDatabase);
+  let data;
+  try {
+    data = await docClient.batchWrite(readyForBatchStore).promise();
   } catch (error) {
     return error;
   }
