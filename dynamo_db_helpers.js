@@ -6,7 +6,7 @@ AWS.config.update({
   endpoint: config.endpoint
 });
 
-const formatBatchDynamo = (arr) => {
+const formatAsDynamoBatch = (arr) => {
   const putRequests =
   arr.reduce((accumulator, current) => {
     return accumulator.concat({ PutRequest: { Item: current } });
@@ -16,9 +16,7 @@ const formatBatchDynamo = (arr) => {
 
 const storeChangelog = async (content) => {
   const docClient = new AWS.DynamoDB.DocumentClient();
-
-  console.log(content.changelog);
-  const readyForBatchStore = formatBatchDynamo(content.changelog);
+  const readyForBatchStore = formatAsDynamoBatch(content.changelog);
   let data;
   try {
     data = await docClient.batchWrite(readyForBatchStore).promise();
