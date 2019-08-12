@@ -14,11 +14,11 @@ const formatAsDynamoBatch = (arr) => {
   return { RequestItems: { [config.changelogsTable]: putRequests } };
 };
 
-const storeChangelog = async (content) => {
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  const readyForBatchStore = formatAsDynamoBatch(content.changelog);
+const batchStoreChangelog = async (content) => {
   let data;
   try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    const readyForBatchStore = formatAsDynamoBatch(content.changelog);
     data = await docClient.batchWrite(readyForBatchStore).promise();
   } catch (error) {
     return error;
@@ -26,8 +26,22 @@ const storeChangelog = async (content) => {
   return data;
 };
 
+const storeChangelog = async (content) => {
+  let data;
+  const params = {
+    TableName: config.changelogsTable,
+    Item: content.changelog[0]
+  };
+  try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    data = await docClient.put(params).promise();
+  } catch (error) {
+    return error;
+  }
+  return data;
+};
+
 const readChangelog = async (vers) => {
-  const docClient = new AWS.DynamoDB.DocumentClient();
   let params;
   if (vers) {
     params = {
@@ -45,6 +59,7 @@ const readChangelog = async (vers) => {
   }
   let data;
   try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
     data = await docClient.scan(params).promise();
   } catch (error) {
     return error;
@@ -53,7 +68,6 @@ const readChangelog = async (vers) => {
 };
 
 const readCategoryChanges = async (category) => {
-  const docClient = new AWS.DynamoDB.DocumentClient();
   const categoryName = category;
   const params = {
     TableName: config.changelogsTable,
@@ -67,6 +81,7 @@ const readCategoryChanges = async (category) => {
   };
   let data;
   try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
     data = await docClient.scan(params).promise();
   } catch (error) {
     return error;
@@ -75,9 +90,9 @@ const readCategoryChanges = async (category) => {
 };
 
 const createChangelogTable = async () => {
-  const dynamodb = new AWS.DynamoDB();
   let data;
   try {
+    const dynamodb = new AWS.DynamoDB();
     data = await dynamodb.createTable(config.initParams).promise();
   } catch (error) {
     return error;
@@ -87,6 +102,7 @@ const createChangelogTable = async () => {
 
 module.exports = {
   storeChangelog: storeChangelog,
+  batchStoreChangelog: batchStoreChangelog,
   createChangelogTable: createChangelogTable,
   readChangelog: readChangelog,
   readCategoryChanges: readCategoryChanges

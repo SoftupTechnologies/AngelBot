@@ -1,7 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import parseInput from './parse_changelog';
-import { storeChangelog, createChangelogTable, readChangelog, readCategoryChanges } from './dynamo_db_helpers';
+import {
+  batchStoreChangelog,
+  storeChangelog,
+  createChangelogTable,
+  readChangelog,
+  readCategoryChanges
+} from './dynamo_db_helpers';
 
 const app = express();
 
@@ -26,8 +32,8 @@ const handleFunc = (func, res) => {
     });
 };
 
-// Post a new changelog
-// the required parameter is content, which should contain the changelog
+// post all changelogs (same version will be overwritten) or
+// post the changelog which is on the top, which usually means the newest
 app.post('/api/v1/changelog', (req, res) => {
   if (!req.body.content) {
     return res.status(400).send({
@@ -36,9 +42,14 @@ app.post('/api/v1/changelog', (req, res) => {
     });
   }
   const content = req.body.content;
+  const batchStore = req.body.store_all;
   try {
     const parsed = parseInput(content);
-    handleFunc(storeChangelog(parsed), res);
+    if (batchStore) {
+      handleFunc(batchStoreChangelog(parsed), res);
+    } else {
+      handleFunc(storeChangelog(parsed), res);
+    }
   } catch (error) {
     return res.status(400).send({
       success: 'false',
@@ -47,7 +58,7 @@ app.post('/api/v1/changelog', (req, res) => {
   }
 });
 
-// Get all changelogs or get specific changelog if the version parameter is passed
+// Get all changelogs or a specific changelog by passing the version
 app.get('/api/v1/changelog', (req, res) => {
   if (req.body.version) {
     const version = req.body.version;
