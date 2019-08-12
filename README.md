@@ -5,31 +5,21 @@ This is work in progress. 🤖
 ## API calls:
 #### Get all changelogs or get a specific changelog version by specifying the version in the request
 ```
-curl --request GET \
-  --url http://localhost:5000/api/v1/changelog \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data [version=1.0.0](optional)
+GET /api/v1/changelog [version=1.0.0](optional)
 ```
-#### Store a new changelog
+#### Store a new changelog, the one on the top or store all with `store_all=true`
 ```
-curl --request POST \
-  --url http://localhost:5000/api/v1/changelog \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'content= changelog'
+POST /api/v1/changelog 'content=changelog' [store_all=true](optional)
 ```
 
-#### To get the all changes from a category including the version for each e.g. 'BUG FIXES'
+#### To get the all changes from a category including the version e.g. 'BUG FIXES'
 ```
-curl --request GET \
-  --url http://localhost:5000/api/v1/changelog/category_changes \
-  --header 'content-type: application/x-www-form-urlencoded' \
-  --data 'category=BUG FIXES'
+GET /api/v1/changelog/category_changes 'category=BUG FIXES'
 ```
 #### Initialize the changelogs table
 
 ```
-curl --request POST \
-  --url http://localhost:5000/api/v1/init
+POST /api/v1/init
 ```
 
 
