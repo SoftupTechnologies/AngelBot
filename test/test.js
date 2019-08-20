@@ -1,5 +1,5 @@
 let assert = require('assert')
-const parseInput = require('../tryParsing')
+const parseInput = require('../parse_changelog')
 
 const fs = require('fs')
 const { promisify } = require('util')

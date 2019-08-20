@@ -1,35 +1,30 @@
-## 1.0.0 (Unreleased)
+
+## 1.0.1 (2019.11.10)
 
 BUG FIXES:
 
-
-* fix a problem with router not responding to back button [PR#30466] 
-* IE 11 bug can break URL unification when comparing objects [PR#30422] 
-* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#30433]
+* Donec accumsan ante vitae purus interdum, non consectetur nibh accumsan.[PR#12345]
+* Praesent scelerisque turpis in rhoncus tincidunt.
+* Ut pretium ante vel justo facilisis, a placerat metus mollis.
+* Curabitur ut sapien ac nulla vestibulum eleifend et et augue.
 
 BREAKING CHANGES:
 
-* Resource `network_port` has been removed
+* Aenean volutpat nibh at enim ultrices, finibus pharetra sapien fermentum.
+* Sed sit amet metus vel nisl pharetra luctus quis in ligula.[PR#1234567889]
+* Aenean sollicitudin urna vitae libero hendrerit malesuada.
+* In nec ipsum posuere, interdum nisi blandit, pretium leo.
 
 FEATURES:
 
-* add ability to watch for AngularJS URL updates through onUrlChange hook [PR#3045115]
+* Quisque nec purus elementum nunc feugiat ultricies sit amet eget diam.
+* Aliquam non urna eu odio pharetra pretium eu sit amet nulla.[PR#12345, PR123455]
+* Integer molestie mi sit amet felis fermentum, eget lobortis metus congue.
+
 
 IMPROVEMENTS:
 
-* Add `ATTRIBUTE` argument (support X new functionality)[PR#30411]
-* use shared DomElementSchemaRegistry instance [PR#30406, PR#30433]
-
-## 0.2.0 (2017.06.20)
-
-FEATURES:
-
-* stricter types for SlicePipe [PR#30451]
-* Implement definitionAndBoundSpan [PR#30401]
-
-## 0.1.12 (2016-06-20)
-
-FEATURES:
-
-* blablabla [PR#30451]
-* Implement definitionAndBoundSpan [PR#30401]
+* Sed consectetur nisi at magna venenatis interdum id eleifend lectus.
+* Cras at libero eget enim efficitur fringilla.
+* Aliquam elementum erat eu semper bibendum.
+* In nec mauris mattis, lacinia enim nec, egestas erat.
