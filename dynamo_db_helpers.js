@@ -1,9 +1,10 @@
 import * as config from './dynamo_db_config';
-var AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
+require('dotenv').config();
 
 AWS.config.update({
   region: config.region,
-  endpoint: config.endpoint
+  endpoint: process.env.DYNAMODB_URI
 });
 
 const formatAsDynamoBatch = (arr) => {
@@ -30,7 +31,8 @@ const storeChangelog = async (content) => {
   let data;
   const params = {
     TableName: config.changelogsTable,
-    Item: content.changelog[0]
+    Item: content.changelog[0],
+    ConditionExpression: 'attribute_not_exists(version)'
   };
   try {
     const docClient = new AWS.DynamoDB.DocumentClient();

@@ -1,3 +1,4 @@
+'use strict';
 import express from 'express';
 import bodyParser from 'body-parser';
 import parseInput from './parse_changelog';
@@ -84,8 +85,9 @@ app.post('/api/v1/init', (req, res) => {
   handleFunc(createChangelogTable(), res);
 });
 
-const PORT = 5000;
+/* const PORT = 5000;
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
-});
+}); */
+module.exports = app;
