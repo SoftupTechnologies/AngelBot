@@ -4,8 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "deploy": "zip -r function.zip .  && aws lambda update-function-code --function-name angelbot --zip-file fileb://function.zip --cli-connect-timeout 20000",
     "test": "mocha",
-    "start": "npx nodemon app.js --exec babel-node --",
+    "start": "npx nodemon index.js --exec babel-node --",
     "convert": "npx nearleyc ./grammar/grammar.ne -o ./grammar/grammar.js",
     "watch": "watch 'npm run convert' -o ./grammar/grammar.ne"
   },
@@ -13,6 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.514.0",
+    "aws-serverless-express": "^3.3.6",
+    "aws-xray-sdk": "^2.3.4",
     "babel-preset-es2015": "^6.24.1",
     "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",

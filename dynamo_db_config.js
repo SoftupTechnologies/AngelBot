@@ -1,9 +1,8 @@
-const region = 'us-west-2';
-const endpoint = 'http://localhost:8000';
 const changelogsTable = 'Changelogs';
+require('dotenv').config();
 
 const initParams = {
-  TableName: changelogsTable,
+  TableName: process.env.DYNAMODB_TABLENAME,
   KeySchema: [
     { AttributeName: 'version', KeyType: 'HASH' }
   ],
@@ -17,8 +16,6 @@ const initParams = {
 };
 
 module.exports = {
-  region: region,
-  endpoint: endpoint,
   changelogsTable: changelogsTable,
   initParams: initParams
 };

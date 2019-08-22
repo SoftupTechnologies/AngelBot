@@ -2,8 +2,10 @@ import * as config from './dynamo_db_config';
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
+const tableName = process.env.DYNAMODB_TABLENAME;
+
 AWS.config.update({
-  region: config.region,
+  region: process.env.REGION,
   endpoint: process.env.DYNAMODB_URI
 });
 
@@ -12,7 +14,7 @@ const formatAsDynamoBatch = (arr) => {
   arr.reduce((accumulator, current) => {
     return accumulator.concat({ PutRequest: { Item: current } });
   }, []);
-  return { RequestItems: { [config.changelogsTable]: putRequests } };
+  return { RequestItems: { [tableName]: putRequests } };
 };
 
 const batchStoreChangelog = async (content) => {
@@ -30,7 +32,7 @@ const batchStoreChangelog = async (content) => {
 const storeChangelog = async (content) => {
   let data;
   const params = {
-    TableName: config.changelogsTable,
+    TableName: tableName,
     Item: content.changelog[0],
     ConditionExpression: 'attribute_not_exists(version)'
   };
@@ -47,7 +49,7 @@ const readChangelog = async (vers) => {
   let params;
   if (vers) {
     params = {
-      TableName: config.changelogsTable,
+      TableName: tableName,
       FilterExpression: '#version = :vers',
       ExpressionAttributeNames: {
         '#version': 'version'
@@ -57,7 +59,7 @@ const readChangelog = async (vers) => {
       }
     };
   } else {
-    params = { TableName: config.changelogsTable };
+    params = { TableName: tableName };
   }
   let data;
   try {
@@ -72,7 +74,7 @@ const readChangelog = async (vers) => {
 const readCategoryChanges = async (category) => {
   const categoryName = category;
   const params = {
-    TableName: config.changelogsTable,
+    TableName: tableName,
     FilterExpression: 'attribute_exists(#category)',
     ProjectionExpression: '#version, #date, #category',
     ExpressionAttributeNames: {
