@@ -1,4 +1,3 @@
-const changelogsTable = 'Changelogs';
 require('dotenv').config();
 
 const initParams = {
@@ -16,6 +15,5 @@ const initParams = {
 };
 
 module.exports = {
-  changelogsTable: changelogsTable,
   initParams: initParams
 };

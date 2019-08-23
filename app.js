@@ -4,16 +4,18 @@ const parseInput = require('./parse_changelog');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
 // Parse incoming requests data
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(awsServerlessExpressMiddleware.eventContext());
 
 // func is an async function and e.g. does CRUD operations
 const handleFunc = (func, res) => {
   func
     .then((data) => {
-      return res.status(201).send({
+      return res.status(200).send({
         success: 'true',
         message: data
       });
@@ -21,7 +23,7 @@ const handleFunc = (func, res) => {
     .catch((error) => {
       return res.status(400).send({
         success: 'false',
-        message: error
+        message: JSON.parse(error)
       });
     });
 };
