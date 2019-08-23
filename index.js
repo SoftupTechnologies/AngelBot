@@ -1,7 +1,7 @@
 'use strict';
 const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./app');
-const binaryMimeTypes = [
+/* const binaryMimeTypes = [
   'application/javascript',
   'application/json',
   'application/octet-stream',
@@ -19,7 +19,7 @@ const binaryMimeTypes = [
   'text/plain',
   'text/text',
   'text/xml'
-];
+]; */
 const server = awsServerlessExpress.createServer(app, null, null);
 
 exports.handler = (event, context) => { awsServerlessExpress.proxy(server, event, context); };
