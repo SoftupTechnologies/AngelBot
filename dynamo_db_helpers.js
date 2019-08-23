@@ -1,4 +1,4 @@
-import * as config from './dynamo_db_config';
+const config = require('./dynamo_db_config');
 const AWS = require('aws-sdk');
 require('dotenv').config();
 

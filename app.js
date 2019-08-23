@@ -1,15 +1,8 @@
 'use strict';
-import express from 'express';
-import bodyParser from 'body-parser';
-import parseInput from './parse_changelog';
-import {
-  batchStoreChangelog,
-  storeChangelog,
-  createChangelogTable,
-  readChangelog,
-  readCategoryChanges
-} from './dynamo_db_helpers';
-
+const dbAction = require('./dynamo_db_helpers');
+const parseInput = require('./parse_changelog');
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
 // Parse incoming requests data
@@ -47,9 +40,9 @@ app.post('/api/v1/changelog', (req, res) => {
   try {
     const parsed = parseInput(content);
     if (batchStore) {
-      handleFunc(batchStoreChangelog(parsed), res);
+      handleFunc(dbAction.batchStoreChangelog(parsed), res);
     } else {
-      handleFunc(storeChangelog(parsed), res);
+      handleFunc(dbAction.storeChangelog(parsed), res);
     }
   } catch (error) {
     return res.status(400).send({
@@ -63,9 +56,9 @@ app.post('/api/v1/changelog', (req, res) => {
 app.get('/api/v1/changelog', (req, res) => {
   if (req.body.version) {
     const version = req.body.version;
-    handleFunc(readChangelog(version), res);
+    handleFunc(dbAction.readChangelog(version), res);
   } else {
-    handleFunc(readChangelog(), res);
+    handleFunc(dbAction.readChangelog(), res);
   }
 });
 
@@ -78,11 +71,11 @@ app.get('/api/v1/changelog/category_changes', (req, res) => {
     });
   }
   const category = req.body.category;
-  handleFunc(readCategoryChanges(category), res);
+  handleFunc(dbAction.readCategoryChanges(category), res);
 });
 
 app.post('/api/v1/init', (req, res) => {
-  handleFunc(createChangelogTable(), res);
+  handleFunc(dbAction.createChangelogTable(), res);
 });
 
 module.exports = app;
