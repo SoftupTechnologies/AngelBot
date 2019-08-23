@@ -1,6 +1,4 @@
+const awsServerlessExpress = require('aws-serverless-express');
 const app = require('./app');
-require('dotenv').config();
-
-app.listen(process.env.PORT, () => {
-  console.log(`App is running on port ${process.env.PORT}`);
-});
+const server = awsServerlessExpress.createServer(app);
+exports.handler = (event, context) => { awsServerlessExpress.proxy(server, event, context); };
