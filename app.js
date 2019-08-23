@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const app = express();
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
+// TODO send the data to response_url of the slack request
+// https://api.slack.com/slash-commands#responding_response_url
+
 // Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
