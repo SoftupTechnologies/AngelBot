@@ -15,7 +15,7 @@ const helper = require('./app_helpers');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Get all changelogs or a specific changelog by passing the version
+// Handles the slack commands
 app.post('/api/v1/changelog', (req, res) => {
   const rawText = req.body.text;
   if (rawText) {
