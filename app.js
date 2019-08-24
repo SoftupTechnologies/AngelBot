@@ -4,7 +4,6 @@ const parseInput = require('./parse_changelog');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 
 // TODO send the data to response_url of the slack request
 // https://api.slack.com/slash-commands#responding_response_url
@@ -12,7 +11,6 @@ const awsServerlessExpressMiddleware = require('aws-serverless-express/middlewar
 // Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(awsServerlessExpressMiddleware.eventContext());
 
 // func is an async function and e.g. does CRUD operations
 const handleFunc = (func, res) => {
