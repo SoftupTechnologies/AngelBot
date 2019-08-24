@@ -32,9 +32,9 @@ const handleFunc = (func, res) => {
 let usageHint = (res) => {
   return res.status(200).send({
     'text': 'Please use one of the following commands:\n' +
-    'changelog all - To get all changelogs\n' +
-    'changelog version x.x.x - To get changes in a specific version\n' +
-    'changelog category BUG FIXES - To get bug fixes in the changelog\n'
+    '/changelog all - To get all changelogs\n' +
+    '/changelog version x.x.x - To get changes in a specific version\n' +
+    '/changelog category BUG FIXES - To get bug fixes in the changelog\n'
   });
 };
 
