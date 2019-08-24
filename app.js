@@ -5,8 +5,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-// TODO send the data to response_url of the slack request
-// https://api.slack.com/slash-commands#responding_response_url
+// TODO format JSON for posting to slack
+// TODO implement request verification with https://api.slack.com/docs/verifying-requests-from-slack/
 
 // Parse incoming requests data
 app.use(bodyParser.json());
