@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "deploy": "zip -r function.zip *.js .env grammar node_modules  && aws lambda update-function-code --function-name angelbot --zip-file fileb://function.zip --cli-connect-timeout 20000",
+    "deploy": "zip -r function.zip *.js grammar node_modules && aws lambda update-function-code --function-name angelbot --zip-file fileb://function.zip --cli-connect-timeout 20000",
     "test": "mocha",
     "start": "npx nodemon local_index.js --exec babel-node --",
     "convert": "npx nearleyc ./grammar/grammar.ne -o ./grammar/grammar.js",
