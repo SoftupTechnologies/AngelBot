@@ -52,18 +52,6 @@ app.post('/api/v1/changelog_write', (req, res) => {
   }
 });
 
-// Get changes from a specific category by specifying it in the request
-app.post('/api/v1/changelog/category_changes', (req, res) => {
-  if (!req.body.category) {
-    return res.status(400).send({
-      success: 'false',
-      message: 'category is required'
-    });
-  }
-  const category = req.body.category;
-  helper.handleFunc(dbAction.readCategoryChanges(category), res);
-});
-
 app.post('/api/v1/init', (req, res) => {
   helper.handleFunc(dbAction.createChangelogTable(), res);
 });
