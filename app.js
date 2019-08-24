@@ -33,7 +33,7 @@ const handleFunc = (func, res) => {
 
 // post all changelogs (same version will be overwritten) or
 // post the changelog which is on the top, which usually means the newest
-app.post('/api/v1/changelog', (req, res) => {
+app.post('/api/v1/changelog_write', (req, res) => {
   if (!req.body.content) {
     return res.status(400).send({
       success: 'false',
@@ -58,7 +58,7 @@ app.post('/api/v1/changelog', (req, res) => {
 });
 
 // Get all changelogs or a specific changelog by passing the version
-app.get('/api/v1/changelog', (req, res) => {
+app.post('/api/v1/changelog_read', (req, res) => {
   if (req.body.version) {
     const version = req.body.version;
     handleFunc(dbAction.readChangelog(version), res);
@@ -68,7 +68,7 @@ app.get('/api/v1/changelog', (req, res) => {
 });
 
 // Get changes from a specific category by specifying it in the request
-app.get('/api/v1/changelog/category_changes', (req, res) => {
+app.post('/api/v1/changelog/category_changes', (req, res) => {
   if (!req.body.category) {
     return res.status(400).send({
       success: 'false',
