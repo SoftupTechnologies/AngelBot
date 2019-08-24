@@ -31,10 +31,10 @@ const handleFunc = (func, res) => {
 
 let usageHint = (res) => {
   return res.status(200).send({
-    'text': 'Please use one of the following commands:\n' +
-    '/changelog all - To get all changelogs\n' +
-    '/changelog version x.x.x - To get changes in a specific version\n' +
-    '/changelog category BUG FIXES - To get bug fixes in the changelog\n'
+    'text': 'Please use one of the following commands:\n\n' +
+    '*/changelog all* - _To get all changelogs_\n' +
+    '*/changelog version x.x.x* - _To get changes in a specific version_\n' +
+    '*/changelog category BUG FIXES* - _To get bug fixes in the changelog_\n'
   });
 };
 
