@@ -9,10 +9,10 @@ AWS.config.update({
   endpoint: process.env.DYNAMODB_URI
 });
 
-const formatAsDynamoBatch = (arr) => {
+const formatAsDynamoBatch = (arr, name) => {
   const putRequests =
   arr.reduce((accumulator, current) => {
-    current.name = 'frontend';
+    current.name = name;
     return accumulator.concat({ PutRequest: { Item: current } });
   }, []);
   return { RequestItems: { [tableName]: putRequests } };
