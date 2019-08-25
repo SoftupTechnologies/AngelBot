@@ -1,6 +1,5 @@
 'use strict';
 const dbAction = require('./dynamo_db_helpers');
-const parseInput = require('./parse_changelog');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -19,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/api/v1/changelog', (req, res) => {
   const rawText = req.body.text;
   if (rawText) {
-    helper.parseCommand(rawText, res);
+    helper.parseSlackAndRespond(rawText, res);
   } else {
     helper.usageHint(res);
   }
@@ -35,25 +34,11 @@ app.post('/api/v1/changelog_write', (req, res) => {
       message: 'content is required'
     });
   }
-  const content = req.body.content;
-  const batchStore = req.body.store_all;
-  try {
-    const parsed = parseInput(content);
-    if (batchStore) {
-      helper.handleFunc(dbAction.batchStoreChangelog(parsed), res);
-    } else {
-      helper.handleFunc(dbAction.storeChangelog(parsed), res);
-    }
-  } catch (error) {
-    return res.status(400).send({
-      success: 'false',
-      message: error.toString()
-    });
-  }
+  helper.parseChangelongAndRespond(req, res);
 });
 
 app.post('/api/v1/init', (req, res) => {
-  helper.handleFunc(dbAction.createChangelogTable(), res);
+  helper.actAndRespond(dbAction.createChangelogTable(), res);
 });
 
 module.exports = app;

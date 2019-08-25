@@ -1,8 +1,24 @@
 const dbAction = require('./dynamo_db_helpers');
+const nearley = require('nearley');
+const grammar = require('./grammar/grammar.js');
+
+const parseInput = (textInput) => {
+  if (textInput.trim().length) {
+    const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+    parser.feed(textInput);
+    if (!parser.results[0]) {
+      throw new Error('Not complete!');
+    }
+    const returnedResult = parser.results[0];
+    return returnedResult;
+  } else {
+    throw new Error('Empty input!');
+  }
+};
 
 // func is an async function and e.g. does CRUD operations
-const handleFunc = (func, res) => {
-  func
+const actAndRespond = (asyncFunc, res) => {
+  asyncFunc
     .then((data) => {
       return res.status(200).send({
         success: 'true',
@@ -26,24 +42,24 @@ let usageHint = (res) => {
   });
 };
 
-let parseCommand = (rawText, res) => {
+let parseSlackAndRespond = (rawText, res) => {
   const tokens = rawText.match(/\S+/g);
   switch (tokens[0]) {
     case 'all':
-      handleFunc(dbAction.readChangelog(), res);
+      actAndRespond(dbAction.readChangelog(), res);
       break;
     case 'version':
       if (tokens[1]) {
-        handleFunc(dbAction.readChangelog(tokens[1]), res);
+        actAndRespond(dbAction.readChangelog(tokens[1]), res);
       } else {
         usageHint(res);
       }
       break;
     case 'category':
       if (tokens[2]) {
-        handleFunc(dbAction.readCategoryChanges(tokens[1] + ' ' + tokens[2]), res);
+        actAndRespond(dbAction.readCategoryChanges(tokens[1] + ' ' + tokens[2]), res);
       } else {
-        handleFunc(dbAction.readCategoryChanges(tokens[1]), res);
+        actAndRespond(dbAction.readCategoryChanges(tokens[1]), res);
       }
       break;
     default:
@@ -51,8 +67,27 @@ let parseCommand = (rawText, res) => {
   }
 };
 
+const parseChangelongAndRespond = (req, res) => {
+  const content = req.body.content;
+  const batchStore = req.body.store_all;
+  try {
+    const parsed = parseInput(content);
+    if (batchStore) {
+      actAndRespond(dbAction.batchStoreChangelog(parsed), res);
+    } else {
+      actAndRespond(dbAction.storeChangelog(parsed), res);
+    }
+  } catch (error) {
+    return res.status(400).send({
+      success: 'false',
+      message: error.toString()
+    });
+  }
+};
+
 module.exports = {
-  parseCommand: parseCommand,
+  parseSlackAndRespond: parseSlackAndRespond,
   usageHint: usageHint,
-  handleFunc: handleFunc
+  actAndRespond: actAndRespond,
+  parseChangelongAndRespond: parseChangelongAndRespond
 };
