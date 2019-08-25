@@ -33,7 +33,7 @@ const actAndRespond = (asyncFunc, res) => {
     });
 };
 
-let usageHint = (res) => {
+const usageHint = (res) => {
   return res.status(200).send({
     'text': 'Please use one of the following commands:\n\n' +
       '*/changelog all* - _To get all changelogs_\n' +
@@ -42,7 +42,7 @@ let usageHint = (res) => {
   });
 };
 
-let parseSlackAndRespond = (rawText, res) => {
+const parseSlackAndRespond = (rawText, res) => {
   const tokens = rawText.match(/\S+/g);
   switch (tokens[0]) {
     case 'all':
