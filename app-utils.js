@@ -35,47 +35,56 @@ const actAndRespond = (asyncFunc, res) => {
 
 const usageHint = (res) => {
   return res.status(200).send({
-    'text': 'Please use one of the following commands:\n\n' +
-      '*/changelog all* - _To get all changelogs_\n' +
-      '*/changelog version x.x.x* - _To get changes in a specific version_\n' +
-      '*/changelog category BUG FIXES* - _To get bug fixes in the changelog_\n'
+    'text': '*Please use one of the following commands:*\n\n' +
+      '*/changelog example-name latest* - _To get latest changes\n' +
+      '*/changelog example-name all* - _To get all changes\n' +
+      '*/changelog example-name version x.x.x* - _To get changes in a specific version_\n' +
+      '*/changelog example-name category BUG FIXES* - _To get all bug fixes in the changelog_\n'
   });
 };
 
 const parseSlackAndRespond = (rawText, res) => {
   const tokens = rawText.match(/\S+/g);
-  switch (tokens[0]) {
-    case 'all':
-      actAndRespond(dbAction.readChangelog(), res);
-      break;
-    case 'version':
-      if (tokens[1]) {
-        actAndRespond(dbAction.readChangelog(tokens[1]), res);
-      } else {
+  const changelogName = tokens[0];
+  if (changelogName) {
+    switch (tokens[1]) {
+      case 'latest':
+        actAndRespond(dbAction.readLatestChangelog(changelogName), res);
+        break;
+      case 'all':
+        actAndRespond(dbAction.readChangelog(changelogName), res);
+        break;
+      case 'version':
+        if (tokens[2]) {
+          actAndRespond(dbAction.readChangelog(changelogName, tokens[2]), res);
+        } else {
+          usageHint(res);
+        }
+        break;
+      case 'category':
+        if (tokens[3]) {
+          actAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2] + ' ' + tokens[3]), res);
+        } else {
+          actAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2]), res);
+        }
+        break;
+      default:
         usageHint(res);
-      }
-      break;
-    case 'category':
-      if (tokens[2]) {
-        actAndRespond(dbAction.readCategoryChanges(tokens[1] + ' ' + tokens[2]), res);
-      } else {
-        actAndRespond(dbAction.readCategoryChanges(tokens[1]), res);
-      }
-      break;
-    default:
-      usageHint(res);
+    }
+  } else {
+    usageHint(res);
   }
 };
 
-const parseChangelongAndRespond = (req, res) => {
+const parseChangelongAndRespond = (req, res, name) => {
   const content = req.body.content;
   const batchStore = req.body.store_all;
   try {
     const parsed = parseInput(content);
     if (batchStore) {
-      actAndRespond(dbAction.batchStoreChangelog(parsed), res);
+      actAndRespond(dbAction.batchStoreChangelog(parsed, name), res);
     } else {
-      actAndRespond(dbAction.storeChangelog(parsed), res);
+      actAndRespond(dbAction.storeChangelog(parsed, name), res);
     }
   } catch (error) {
     return res.status(400).send({

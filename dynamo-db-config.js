@@ -3,9 +3,11 @@ require('dotenv').config();
 const initParams = {
   TableName: process.env.DYNAMODB_TABLENAME,
   KeySchema: [
-    { AttributeName: 'version', KeyType: 'HASH' }
+    { AttributeName: 'name', KeyType: 'HASH' },
+    { AttributeName: 'version', KeyType: 'RANGE' }
   ],
   AttributeDefinitions: [
+    { AttributeName: 'name', AttributeType: 'S' },
     { AttributeName: 'version', AttributeType: 'S' }
   ],
   ProvisionedThroughput: {

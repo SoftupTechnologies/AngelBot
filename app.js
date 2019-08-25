@@ -28,13 +28,13 @@ app.post('/api/v1/changelog', (req, res) => {
 // post the changelog which is on the top, which usually means the newest
 // this endpoint is not meant to be used from slack
 app.post('/api/v1/changelog_write', (req, res) => {
-  if (!req.body.content) {
+  if (!req.body.content || !req.body.name) {
     return res.status(400).send({
       success: 'false',
-      message: 'content is required'
+      message: 'content and name are both required'
     });
   }
-  utils.parseChangelongAndRespond(req, res);
+  utils.parseChangelongAndRespond(req, res, req.body.name);
 });
 
 app.post('/api/v1/init', (req, res) => {

@@ -12,16 +12,17 @@ AWS.config.update({
 const formatAsDynamoBatch = (arr) => {
   const putRequests =
   arr.reduce((accumulator, current) => {
+    current.name = 'frontend';
     return accumulator.concat({ PutRequest: { Item: current } });
   }, []);
   return { RequestItems: { [tableName]: putRequests } };
 };
 
-const batchStoreChangelog = async (content) => {
+const batchStoreChangelog = async (content, name) => {
   let data;
   try {
     const docClient = new AWS.DynamoDB.DocumentClient();
-    const readyForBatchStore = formatAsDynamoBatch(content.changelog);
+    const readyForBatchStore = formatAsDynamoBatch(content.changelog, name);
     data = await docClient.batchWrite(readyForBatchStore).promise();
   } catch (error) {
     return error;
@@ -29,12 +30,18 @@ const batchStoreChangelog = async (content) => {
   return data;
 };
 
-const storeChangelog = async (content) => {
+const storeChangelog = async (content, name) => {
   let data;
+  let readyToStore = content.changelog[0];
+  readyToStore.name = name;
   const params = {
     TableName: tableName,
-    Item: content.changelog[0],
-    ConditionExpression: 'attribute_not_exists(version)'
+    Item: readyToStore,
+    ConditionExpression: 'attribute_not_exists(#name) and attribute_not_exists(#version)',
+    ExpressionAttributeNames: {
+      '#name': 'name',
+      '#version': 'version'
+    }
   };
   try {
     const docClient = new AWS.DynamoDB.DocumentClient();
@@ -45,21 +52,55 @@ const storeChangelog = async (content) => {
   return data;
 };
 
-const readChangelog = async (vers) => {
+const readLatestChangelog = async (name) => {
+  const params = {
+    TableName: tableName,
+    KeyConditionExpression: '#name = :nm',
+    ExpressionAttributeNames: {
+      '#name': 'name'
+    },
+    ExpressionAttributeValues: {
+      ':nm': name
+    },
+    Limit: 1,
+    ScanIndexForward: false
+  };
+  let data;
+  try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    data = await docClient.query(params).promise();
+  } catch (error) {
+    return error;
+  }
+  return data;
+};
+
+const readChangelog = async (name, vers) => {
   let params;
   if (vers) {
     params = {
       TableName: tableName,
-      FilterExpression: '#version = :vers',
+      FilterExpression: '#version = :vers and #name = :nm',
       ExpressionAttributeNames: {
-        '#version': 'version'
+        '#version': 'version',
+        '#name': 'name'
       },
       ExpressionAttributeValues: {
-        ':vers': vers
+        ':vers': vers,
+        ':nm': name
       }
     };
   } else {
-    params = { TableName: tableName };
+    params = {
+      TableName: tableName,
+      FilterExpression: '#name = :nm',
+      ExpressionAttributeNames: {
+        '#name': 'name'
+      },
+      ExpressionAttributeValues: {
+        ':nm': name
+      }
+    };
   }
   let data;
   try {
@@ -71,16 +112,20 @@ const readChangelog = async (vers) => {
   return data;
 };
 
-const readCategoryChanges = async (category) => {
+const readCategoryChanges = async (name, category) => {
   const categoryName = category;
   const params = {
     TableName: tableName,
-    FilterExpression: 'attribute_exists(#category)',
+    FilterExpression: 'attribute_exists(#category) and #name = :nm',
     ProjectionExpression: '#version, #date, #category',
     ExpressionAttributeNames: {
+      '#name': 'name',
       '#category': categoryName,
       '#version': 'version',
       '#date': 'date'
+    },
+    ExpressionAttributeValues: {
+      ':nm': name
     }
   };
   let data;
@@ -105,6 +150,7 @@ const createChangelogTable = async () => {
 };
 
 module.exports = {
+  readLatestChangelog: readLatestChangelog,
   storeChangelog: storeChangelog,
   batchStoreChangelog: batchStoreChangelog,
   createChangelogTable: createChangelogTable,
