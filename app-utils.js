@@ -1,4 +1,4 @@
-const dbAction = require('./dynamo_db_helpers');
+const dbAction = require('./dynamo-db-utils');
 const nearley = require('nearley');
 const grammar = require('./grammar/grammar.js');
 

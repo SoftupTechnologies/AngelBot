@@ -1,4 +1,4 @@
-const config = require('./dynamo_db_config');
+const config = require('./dynamo-db-config');
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
