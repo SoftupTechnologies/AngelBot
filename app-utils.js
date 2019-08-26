@@ -33,13 +33,15 @@ const actAndRespond = (asyncFunc, res) => {
     });
 };
 
-const usageHint = (res) => {
+const usageHint = async (res) => {
+  const names = await formatedChangelogNames();
   return res.status(200).send({
     'text': '*Please use one of the following commands:*\n\n' +
       '*/changelog example-name latest* - _To get latest changes\n' +
       '*/changelog example-name all* - _To get all changes\n' +
       '*/changelog example-name version x.x.x* - _To get changes in a specific version_\n' +
-      '*/changelog example-name category BUG FIXES* - _To get all bug fixes in the changelog_\n'
+      '*/changelog example-name category BUG FIXES* - _To get all bug fixes in the changelog_\n\n' +
+      'Available changelogs: ' + names
   });
 };
 
@@ -92,6 +94,19 @@ const parseChangelongAndRespond = (req, res, name) => {
       message: error.toString()
     });
   }
+};
+
+const formatedChangelogNames = async () => {
+  const namesJson = await dbAction.readAllChangelogs()
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
+  const names = namesJson.Items;
+  const distinctNames = [...new Set(names.map(x => x.name))];
+  return distinctNames;
 };
 
 module.exports = {

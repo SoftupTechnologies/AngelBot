@@ -138,6 +138,24 @@ const readCategoryChanges = async (name, category) => {
   return data;
 };
 
+const readAllChangelogs = async () => {
+  const params = {
+    TableName: tableName,
+    ProjectionExpression: '#name',
+    ExpressionAttributeNames: {
+      '#name': 'name'
+    }
+  };
+  let data;
+  try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    data = await docClient.scan(params).promise();
+  } catch (error) {
+    return error;
+  }
+  return data;
+};
+
 const createChangelogTable = async () => {
   let data;
   try {
@@ -155,5 +173,6 @@ module.exports = {
   batchStoreChangelog: batchStoreChangelog,
   createChangelogTable: createChangelogTable,
   readChangelog: readChangelog,
-  readCategoryChanges: readCategoryChanges
+  readCategoryChanges: readCategoryChanges,
+  readAllChangelogs: readAllChangelogs
 };
