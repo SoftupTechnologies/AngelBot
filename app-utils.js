@@ -37,11 +37,11 @@ const usageHint = async (res) => {
   const names = await formatedChangelogNames();
   return res.status(200).send({
     'text': '*Please use one of the following commands:*\n\n' +
-      '*/changelog example-name latest* - _To get latest changes\n' +
-      '*/changelog example-name all* - _To get all changes\n' +
+      '*/changelog example-name latest* - _To get latest changes_\n' +
+      '*/changelog example-name all* - _To get all changes_\n' +
       '*/changelog example-name version x.x.x* - _To get changes in a specific version_\n' +
       '*/changelog example-name category BUG FIXES* - _To get all bug fixes in the changelog_\n\n' +
-      'Available changelogs: ' + names
+      'Available changelogs: ' + '_' + names + '_'
   });
 };
 
