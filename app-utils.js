@@ -17,32 +17,36 @@ const parseInput = (textInput) => {
 };
 
 // func is an async function and e.g. does CRUD operations
+const actAndRespondSlack = (asyncFunc, res) => {
+  asyncFunc
+    .then((data) => {
+      return res.status(200).send(
+        jsonToSlack(data)
+      );
+    })
+    .catch((error) => {
+      return res.status(400).send({
+        success: 'false',
+        message: error
+      });
+    });
+};
+
+// func is an async function and e.g. does CRUD operations
 const actAndRespond = (asyncFunc, res) => {
   asyncFunc
     .then((data) => {
-      return res.status(200).send({
-        success: 'true',
+      return res.status(400).send({
+        success: true,
         message: data
       });
     })
     .catch((error) => {
       return res.status(400).send({
         success: 'false',
-        message: JSON.parse(error)
+        message: error
       });
     });
-};
-
-const usageHint = async (res) => {
-  const names = await formatedChangelogNames();
-  return res.status(200).send({
-    'text': '*Please use one of the following commands:*\n\n' +
-      '*/changelog* name *latest* - _To get latest changes_\n' +
-      '*/changelog* name *all* - _To get all changes_\n' +
-      '*/changelog* name *version* x.x.x - _To get changes in a specific version_\n' +
-      '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS* - _To get all changes of that category in the changelog_\n\n' +
-      'Available changelogs: ' + '_' + names + '_'
-  });
 };
 
 const parseSlackAndRespond = (rawText, res) => {
@@ -51,23 +55,23 @@ const parseSlackAndRespond = (rawText, res) => {
   if (changelogName) {
     switch (tokens[1]) {
       case 'latest':
-        actAndRespond(dbAction.readLatestChangelog(changelogName), res);
+        actAndRespondSlack(dbAction.readLatestChangelog(changelogName), res);
         break;
       case 'all':
-        actAndRespond(dbAction.readChangelog(changelogName), res);
+        actAndRespondSlack(dbAction.readChangelog(changelogName), res);
         break;
       case 'version':
         if (tokens[2]) {
-          actAndRespond(dbAction.readChangelog(changelogName, tokens[2]), res);
+          actAndRespondSlack(dbAction.readChangelog(changelogName, tokens[2]), res);
         } else {
           usageHint(res);
         }
         break;
       case 'category':
         if (tokens[3]) {
-          actAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2] + ' ' + tokens[3]), res);
+          actAndRespondSlack(dbAction.readCategoryChanges(changelogName, tokens[2] + ' ' + tokens[3]), res);
         } else {
-          actAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2]), res);
+          actAndRespondSlack(dbAction.readCategoryChanges(changelogName, tokens[2]), res);
         }
         break;
       default:
@@ -96,6 +100,23 @@ const parseChangelongAndRespond = (req, res, name) => {
   }
 };
 
+const jsonToSlack = (jsonData) => {
+  let items = jsonData.Items;
+  if (!items.length) {
+    return { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'No data' } };
+  }
+  let slackMsg = items.map(x =>
+    'Version: *' + x.version + '*\n' +
+    'Date: *' + x.date + '*\n' +
+    '*Changes*' + '\n' +
+    (typeof x['BREAKING CHANGES'] !== 'undefined' ? '\nBREAKING CHANGES\n' + extractCategoryChanges(x['BREAKING CHANGES']) + '\n' : '') +
+    (typeof x['FEATURES'] !== 'undefined' ? '\nFEATURES\n' + extractCategoryChanges(x['FEATURES']) + '\n' : '') +
+    (typeof x['IMPROVEMENTS'] !== 'undefined' ? '\nIMPROVEMENTS\n' + extractCategoryChanges(x['IMPROVEMENTS']) + '\n' : '') +
+    '\n'
+  );
+  return formatAsSlack(slackMsg);
+};
+
 const formatedChangelogNames = async () => {
   const namesJson = await dbAction.readAllChangelogs()
     .then((data) => {
@@ -107,6 +128,37 @@ const formatedChangelogNames = async () => {
   const names = namesJson.Items;
   const distinctNames = [...new Set(names.map(x => x.name))];
   return distinctNames;
+};
+
+const extractCategoryChanges = (jsonData) => {
+  let answer = jsonData.map(x =>
+    '\n• ' + x.description
+  );
+  answer.join('');
+  return answer;
+};
+
+const formatAsSlack = (arr) => {
+  let slackMessage =
+  arr.reduce((accumulator, current) => {
+    return accumulator.concat(
+      { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': current } },
+      { 'type': 'divider' }
+    );
+  }, []);
+  return slackMessage;
+};
+
+const usageHint = async (res) => {
+  const names = await formatedChangelogNames();
+  return res.status(200).send({
+    'text': '*Please use one of the following commands:*\n\n' +
+      '*/changelog* name *latest* - _To get latest changes_\n' +
+      '*/changelog* name *all* - _To get all changes_\n' +
+      '*/changelog* name *version* x.x.x - _To get changes in a specific version_\n' +
+      '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS* - _To get all changes of that category in the changelog_\n\n' +
+      'Available changelogs: ' + '_' + names + '_'
+  });
 };
 
 module.exports = {

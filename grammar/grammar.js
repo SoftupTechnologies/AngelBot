@@ -53,7 +53,7 @@ var grammar = {
     {"name": "ENTRIES", "symbols": []},
     {"name": "ENTRY", "symbols": [(lexer.has("DESCRPT") ? {type: "DESCRPT"} : DESCRPT), (lexer.has("PR") ? {type: "PR"} : PR)], "postprocess": function(d) { return {description:d[0].toString().trim(), pr:d[1].toString()}; }},
     {"name": "ENTRY", "symbols": [(lexer.has("DESCRPT") ? {type: "DESCRPT"} : DESCRPT)], "postprocess": function(d) { return {description:d[0].toString().trim()}; }},
-    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return (new Date (d[0])).toISOString(); }},
+    {"name": "DATE", "symbols": [(lexer.has("DATE") ? {type: "DATE"} : DATE)], "postprocess": function(d) { return (new Date (d[0])).toISOString().split('T')[0]; }},
     {"name": "DATE", "symbols": [(lexer.has("UNRELEASED") ? {type: "UNRELEASED"} : UNRELEASED)], "postprocess": function(d) { return d[0]; }},
     {"name": "COLON", "symbols": [(lexer.has("COLON") ? {type: "COLON"} : COLON)]},
     {"name": "COLON", "symbols": []},

@@ -42,7 +42,7 @@ ENTRIES -> ENTRY WS:* ENTRIES                                       {% function(
 ENTRY -> %DESCRPT %PR                                               {% function(d) { return {description:d[0].toString().trim(), pr:d[1].toString()}; } %}
         | %DESCRPT                                                  {% function(d) { return {description:d[0].toString().trim()}; } %}
 
-DATE -> %DATE                                                       {% function(d) { return (new Date (d[0])).toISOString(); } %}
+DATE -> %DATE                                                       {% function(d) { return (new Date (d[0])).toISOString().split('T')[0]; } %}
       | %UNRELEASED                                                 {% function(d) { return d[0]; } %}
 
 COLON -> %COLON
