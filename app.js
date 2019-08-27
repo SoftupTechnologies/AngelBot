@@ -1,9 +1,9 @@
 'use strict';
-const dbAction = require('./dynamo-db-utils');
+const dbUtils = require('./dynamo-db-utils');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const utils = require('./app-utils');
+const appUtils = require('./app-utils');
 
 // TODO format JSON for posting to slack by implementing jsonToSlack()
 // TODO implement request verification with https://api.slack.com/docs/verifying-requests-from-slack
@@ -18,9 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/api/v1/changelog', (req, res) => {
   const rawText = req.body.text;
   if (rawText) {
-    utils.parseSlackAndRespond(rawText, res);
+    appUtils.parseSlackAndRespond(rawText, res);
   } else {
-    utils.usageHint(res);
+    appUtils.usageHint(res);
   }
 });
 
@@ -34,11 +34,11 @@ app.post('/api/v1/changelog_write', (req, res) => {
       message: 'content and name are both required'
     });
   }
-  utils.parseChangelongAndRespond(req, res, req.body.name);
+  appUtils.parseChangelongAndRespond(req, res, req.body.name);
 });
 
 app.post('/api/v1/init', (req, res) => {
-  utils.actAndRespond(dbAction.createChangelogTable(), res);
+  appUtils.actAndRespond(dbUtils.createChangelogTable(), res);
 });
 
 module.exports = app;
