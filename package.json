@@ -19,7 +19,8 @@
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "moo": "^0.5.0",
-    "nearley": "^2.18.0"
+    "nearley": "^2.18.0",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

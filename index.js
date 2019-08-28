@@ -22,4 +22,6 @@ const app = require('./app');
 ]; */
 const server = awsServerlessExpress.createServer(app, null, null);
 
-exports.handler = (event, context) => { awsServerlessExpress.proxy(server, event, context); };
+exports.handler = (event, context, callback) => {
+  awsServerlessExpress.proxy(server, event, context);
+};

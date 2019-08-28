@@ -15,10 +15,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Handles the slack commands
-app.post('/api/v1/changelog', (req, res) => {
+app.post('/api/v1/changelog', async (req, res) => {
   const rawText = req.body.text;
   if (rawText) {
-    appUtils.parseSlackAndRespond(rawText, res);
+    res.status(200).send(
+      'Let me look for you ' + req.body.user_name
+    ).then(appUtils.parseSlackAndRespond(rawText, req.body.response_url, res));
   } else {
     appUtils.usageHint(res);
   }
