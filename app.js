@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const appUtils = require('./app-utils');
 
-// TODO format JSON for posting to slack by implementing jsonToSlack()
 // TODO implement request verification with https://api.slack.com/docs/verifying-requests-from-slack
 // and https://github.com/slackapi/template-channel-naming/blob/master/src/verifySignature.js
 // TODO implement x-api-key for non slack endpoints like changelog posting
