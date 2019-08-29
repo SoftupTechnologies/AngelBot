@@ -113,14 +113,13 @@ const readChangelog = async (name, vers) => {
 };
 
 const readCategoryChanges = async (name, category) => {
-  const categoryName = category;
   const params = {
     TableName: tableName,
     FilterExpression: 'attribute_exists(#category) and #name = :nm',
     ProjectionExpression: '#version, #date, #category',
     ExpressionAttributeNames: {
       '#name': 'name',
-      '#category': categoryName,
+      '#category': category,
       '#version': 'version',
       '#date': 'date'
     },
