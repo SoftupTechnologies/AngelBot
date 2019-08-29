@@ -19,7 +19,8 @@ app.post('/api/v1/changelog', async (req, res) => {
   if (rawText) {
     res.status(200).send(
       'Let me look for you ' + req.body.user_name
-    ).then(appUtils.parseSlackAndRespond(rawText, req.body.response_url, res));
+    );
+    appUtils.parseSlackAndRespond(rawText, req.body.response_url, res);
   } else {
     appUtils.usageHint(res);
   }

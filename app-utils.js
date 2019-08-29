@@ -21,14 +21,13 @@ const parseInput = (textInput) => {
 const sendToSlack = (data, responseUrl) => {
   const params = {
     url: responseUrl,
-    headers: { 'Content-Type': 'application/json' },
     json: data
   };
   request.post(params, function (err, res, body) {
     if (err) {
       console.log('------error------', err);
     } else {
-      console.log('------success--------', body);
+      console.log('------success--------', body, res);
     }
   });
 };
