@@ -1,37 +1,22 @@
 {
-  "name": "changelogserver",
+  "name": "angelbot-lambda",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "deploy": "zip -r function.zip *.js grammar node_modules && aws lambda update-function-code --function-name angelbot --zip-file fileb://function.zip --cli-connect-timeout 20000 && rm function.zip",
-    "test": "mocha",
-    "start": "npx nodemon app.local.js --exec babel-node --",
-    "convert": "npx nearleyc ./grammar/grammar.ne -o ./grammar/grammar.js",
-    "watch": "watch 'npm run convert' -o ./grammar/grammar.ne"
+    "start-angelbot": "npx nodemon ./angelbot/app.local.js --exec babel-node --",
+    "start-dealer-read": "npx nodemon ./dealer-read/app.local.js --exec babel-node --",
+    "zip-angelbot": "cd ./angelbot && zip -r ../angelbot-pack.zip *",
+    "zip-dealer-read": "cd ./dealer-read && zip -r ../dealer-read-pack.zip *",
+    "upload-angelbot": "aws lambda update-function-code --function-name angelbot --zip-file fileb://angelbot-pack.zip --cli-connect-timeout 20000",
+    "upload-dealer-read": "aws lambda update-function-code --function-name dealer-read --zip-file fileb://dealer-read-pack.zip --cli-connect-timeout 20000",
+    "deploy-angelbot": "npm run zip-angelbot && npm run upload-angelbot",
+    "deploy-dealer-read": "npm run zip-dealer-read && npm run upload-dealer-read",
+    "deploy": "npm run deploy-angelbot && npm run deploy-dealer-read"
   },
-  "author": "Erald Totraku, Shpëtim Selaci",
+  "author": "Erald Totraku",
   "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "^2.514.0",
-    "aws-serverless-express": "^3.3.6",
-    "body-parser": "^1.19.0",
-    "dotenv": "^8.1.0",
-    "express": "^4.17.1",
-    "moo": "^0.5.0",
-    "nearley": "^2.18.0",
-    "request": "^2.88.0"
-  },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.1",
-    "watch": "^1.0.2"
-  },
-  "standard": {
-    "env": [
-      "mocha"
-    ]
+    "babel-preset-env": "^1.7.0"
   }
 }
