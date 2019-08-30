@@ -51,7 +51,7 @@ const parseSlacGetData = async (rawText) => {
 
 const usageHint = async () => {
   const names = await formatedChangelogNames();
-  const message = await {
+  const message = {
     'text': '*Please use one of the following commands:*\n\n' +
       '*/changelog* name *latest* - _To get latest changes_\n' +
       '*/changelog* name *all* - _To get all changes_\n' +
@@ -63,13 +63,7 @@ const usageHint = async () => {
 };
 
 const formatedChangelogNames = async () => {
-  const namesJson = await dbAction.readAllChangelogs()
-    .then((data) => {
-      return data;
-    })
-    .catch((error) => {
-      return error;
-    });
+  const namesJson = await dbAction.readAllChangelogs();
   const names = namesJson.Items;
   const distinctNames = [...new Set(names.map(x => x.name))];
   return distinctNames;

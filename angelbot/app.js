@@ -8,10 +8,7 @@ const slackFormatter = require('./json-to-slack');
 // TODO implement x-api-key for non slack endpoints like changelog posting
 
 const handleSlackRequest = async (url, text) => {
-  console.log('text', text);
-  console.log('url', url);
   const jsonPayload = await appUtils.parseSlackGetData(text);
-  console.log('appUtils.parseSlackGetData(event.text)', jsonPayload);
   const slackPayload = slackFormatter.jsonToSlack(jsonPayload);
   sendToSlack(slackPayload, url);
   return {};

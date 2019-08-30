@@ -1,4 +1,7 @@
 const jsonToSlack = (jsonData) => {
+  if (!jsonData.Items) {
+    return jsonData;
+  }
   let items = jsonData.Items;
   if (!items.length) {
     return { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'No data' } };
