@@ -56,7 +56,7 @@ const usageHint = async () => {
       '*/changelog* name *latest* - _To get latest changes_\n' +
       '*/changelog* name *all* - _To get all changes_\n' +
       '*/changelog* name *version* x.x.x - _To get changes in a specific version_\n' +
-      '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS* - _To get all changes of that category in the changelog_\n\n' +
+      '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS - _To get all changes of that category in the changelog_\n\n' +
       'Available changelogs: ' + '_' + names + '_'
   };
   return message;
