@@ -14,9 +14,9 @@ const actAndRespondSlack = async (asyncFunc) => {
 
 const parseSlacGetData = async (rawText) => {
   const tokens = rawText.match(/\S+/g);
-  const changelogName = tokens[0];
   let dbJSON;
-  if (changelogName) {
+  if (tokens) {
+    const changelogName = tokens[0];
     switch (tokens[1]) {
       case 'latest':
         dbJSON = await actAndRespondSlack(dbAction.readLatestChangelog(changelogName));
@@ -57,7 +57,7 @@ const usageHint = async () => {
       '*/changelog* name *all* - _To get all changes_\n' +
       '*/changelog* name *version* x.x.x - _To get changes in a specific version_\n' +
       '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS - _To get all changes of that category in the changelog_\n\n' +
-      'Available changelogs: ' + '_' + names + '_'
+      '*' + 'Your available changelogs: ' + '_' + names + '_' + '*'
   };
   return message;
 };

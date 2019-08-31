@@ -16,7 +16,7 @@ const sns = new AWS.SNS();
 app.post('/api/v1/changelog', async (req, res) => {
   await sendSNS(req.body.response_url, req.body.text);
   res.status(200).send(
-    'Let me look for you ' + req.body.user_name
+    'Let me look for you ' + formatName(req.body.user_name) + ' :mag:'
   );
 });
 
@@ -30,6 +30,10 @@ const sendSNS = async (delayedURL, text) => {
   };
   await sns.publish(params).promise();
   return {};
+};
+
+const formatName = (unformated) => {
+  return unformated.charAt(0).toUpperCase() + unformated.split('.')[0].slice(1);
 };
 
 module.exports = app;
