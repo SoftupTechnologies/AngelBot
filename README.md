@@ -2,28 +2,11 @@
 
 This is work in progress. 🤖
 
-## API calls:
-#### Get all changelogs or get a specific changelog version by specifying the version in the request
-```
-GET /api/v1/changelog [version=1.0.0](optional)
-```
-#### Store a new changelog, the one on the top or store all with `store_all=true`
-```
-POST /api/v1/changelog 'content=changelog' [store_all=true](optional)
-```
+The purpose of this project is to provide an easy way to read changelogs.
+Specificly, after a deployment the changelog is automatically sent to a AWS lambda function (dealer-write) which parses and then stores it in a dynamoDB table.
+Another lambda (dealer-read) does the work of responding to a slack slash command which is then pushed as a AWS SNS. The SNS invokes the interpreting lambda (angelbot), which interprets the slash command, reads the changelog table and lastly sends the asked information to the slack channel.
 
-#### To get the all changes from a category including the version e.g. 'BUG FIXES'
-```
-GET /api/v1/changelog/category_changes 'category=BUG FIXES'
-```
-#### Initialize the changelogs table
-
-```
-POST /api/v1/init
-```
-
-
-### Info
+### Posting API
 * Install npm packages
 * Compile nearley file to js every time you make changes:
 `npm run convert`
