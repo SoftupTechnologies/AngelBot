@@ -6,13 +6,17 @@
   "scripts": {
     "start-angelbot": "npx nodemon ./angelbot/app.local.js --exec babel-node --",
     "start-dealer-read": "npx nodemon ./dealer-read/app.local.js --exec babel-node --",
+    "start-dealer-write": "npx nodemon ./dealer-write/app.local.js --exec babel-node --",
     "zip-angelbot": "cd ./angelbot && zip -r ../angelbot-pack.zip *",
     "zip-dealer-read": "cd ./dealer-read && zip -r ../dealer-read-pack.zip *",
+    "zip-dealer-write": "cd ./dealer-write && zip -r ../dealer-write-pack.zip *",
     "upload-angelbot": "aws lambda update-function-code --function-name angelbot --zip-file fileb://angelbot-pack.zip --cli-connect-timeout 20000",
     "upload-dealer-read": "aws lambda update-function-code --function-name dealer-read --zip-file fileb://dealer-read-pack.zip --cli-connect-timeout 20000",
+    "upload-dealer-write": "aws lambda update-function-code --function-name dealer-write --zip-file fileb://dealer-write-pack.zip --cli-connect-timeout 20000",
     "deploy-angelbot": "npm run zip-angelbot && npm run upload-angelbot",
     "deploy-dealer-read": "npm run zip-dealer-read && npm run upload-dealer-read",
-    "deploy": "npm run deploy-angelbot && npm run deploy-dealer-read"
+    "deploy-dealer-write": "npm run zip-dealer-write && npm run upload-dealer-write",
+    "deploy": "npm run deploy-angelbot && npm run deploy-dealer-read && npm run deploy-dealer-write"
   },
   "author": "Erald Totraku",
   "license": "ISC",

@@ -1,4 +1,4 @@
-const config = require('../dealer-write/dynamo-db-config');
+const config = require('./dynamo-db-config');
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
