@@ -1,4 +1,6 @@
 const dbAction = require('./dynamo-db-utils');
+const slackFormatter = require('./json-to-slack');
+const slackMenu = require('./slack-menu');
 
 // func is an async function and e.g. does CRUD operations
 const actAndRespondSlack = async (asyncFunc) => {
@@ -12,7 +14,17 @@ const actAndRespondSlack = async (asyncFunc) => {
   return (dbData);
 };
 
-const parseSlacGetData = async (rawText) => {
+const parseSlackGetData = async (payload) => {
+  if (payload.actions !== undefined) {
+    const actionnType = payload.actions[0].action_id;
+    const dbInfo = await parseSlackReadDB(command);
+    return (slackFormatter.jsonToSlack(dbInfo));
+  }
+  const names = await formatedChangelogNames();
+  return slackMenu.mainMenu(names);
+};
+
+const parseSlackReadDB = async (rawText) => {
   const tokens = rawText.match(/\S+/g);
   let dbJSON;
   if (tokens) {
@@ -70,6 +82,6 @@ const formatedChangelogNames = async () => {
 };
 
 module.exports = {
-  parseSlackGetData: parseSlacGetData,
+  parseSlackGetData: parseSlackGetData,
   usageHint: usageHint
 };

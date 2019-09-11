@@ -33,10 +33,12 @@ const toSlackStructure = (arr) => {
     arr.reduce((accumulator, current) => {
       return accumulator.concat(
         { 'type': 'divider' },
-        { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': current } }
+        { 'type': 'section',
+          'text': { 'type': 'mrkdwn', 'text': current }
+        }
       );
     }, []);
-  return { blocks: slackMessage };
+  return { replace_original: false, blocks: slackMessage };
 };
 
 module.exports = {

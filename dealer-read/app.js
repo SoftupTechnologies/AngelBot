@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const AWS = require('aws-sdk');
+const signature = require('./verifySignature');
 
 // TODO implement request verification with https://api.slack.com/docs/verifying-requests-from-slack
 // and https://github.com/slackapi/template-channel-naming/blob/master/src/verifySignature.js
@@ -14,17 +15,23 @@ const sns = new AWS.SNS();
 
 // Prevent timeout with status 200 and invoke angelbot to handle request
 app.post('/api/v1/changelog', async (req, res) => {
-  await sendSNS(req.body.response_url, req.body.text);
+  console.log('req', req);
+  let payload = { type: 'slash', response_url: req.body.response_url, trigger_id: req.trigger_id };
+  if (req.body.payload !== undefined) {
+    payload = req.body.payload;
+  }
+
+  await sendSNS(payload);
   res.status(200).send(
-    'Let me look for you ' + formatName(req.body.user_name) + ' :mag:'
+    'ok'
   );
 });
 
-const sendSNS = async (delayedURL, text) => {
-  const received = { 'url': delayedURL, 'text': text };
-  const payload = JSON.stringify(received);
+const sendSNS = async (payload) => {
+  const received = { payload: payload };
+  const payloadString = JSON.stringify(received);
   const params = {
-    Message: payload,
+    Message: payloadString,
     Subject: 'SNS from slack',
     TopicArn: 'arn:aws:sns:us-west-2:401901783832:changelog-request'
   };
