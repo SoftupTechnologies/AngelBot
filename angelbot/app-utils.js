@@ -16,8 +16,8 @@ const actAndRespondSlack = async (asyncFunc) => {
 
 const parseSlackGetData = async (payload) => {
   if (payload.actions !== undefined) {
-    const actionnType = payload.actions[0].action_id;
-    const dbInfo = await parseSlackReadDB(command);
+    const actionType = payload.actions[0].action_id;
+    const dbInfo = await parseSlackReadDB(actionType);
     return (slackFormatter.jsonToSlack(dbInfo));
   }
   const names = await formatedChangelogNames();
