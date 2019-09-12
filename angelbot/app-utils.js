@@ -6,6 +6,8 @@ const actionSelectedChangelog = 'action_select_changelog';
 const version = 'version';
 const actionSlackCommand = '';
 
+const error = { text: 'something went wrong :fire_engine:' };
+
 // func is an async function and e.g. does CRUD operations
 const actAndRespondSlack = async (asyncFunc) => {
   const dbData = await asyncFunc
@@ -36,7 +38,7 @@ const parseRequest = async (payload) => {
         return converted;
       }
       default:
-        return { text: 'something went wrong' };
+        return error;
     }
   }
   // const dbInfo = await parseSlackReadDB();
@@ -62,7 +64,7 @@ const parseSlackReadDB = async (rawText) => {
           dbJSON = await actAndRespondSlack(dbAction.readChangelog(changelogName, tokens[2]));
           break;
         } else {
-          dbJSON = await usageHint();
+          dbJSON = error;
           break;
         }
       case 'category':
@@ -74,25 +76,12 @@ const parseSlackReadDB = async (rawText) => {
           break;
         }
       default:
-        dbJSON = await usageHint();
+        dbJSON = error;
     }
   } else {
-    dbJSON = await usageHint();
+    dbJSON = error;
   }
   return dbJSON;
-};
-
-const usageHint = async () => {
-  const names = await changelogPropValuesArray(dbAction.readAllChangelogsNames(), 'name');
-  const message = {
-    'text': '*Please use one of the following commands:*\n\n' +
-      '*/changelog* name *latest* - _To get latest changes_\n' +
-      '*/changelog* name *all* - _To get all changes_\n' +
-      '*/changelog* name *version* x.x.x - _To get changes in a specific version_\n' +
-      '*/changelog* name *category* BREAKING CHANGES/NOTES/FEATURES/ENHANCEMENTS/BUG FIXES/IMPROVEMENTS - _To get all changes of that category in the changelog_\n\n' +
-      '*' + 'Your available changelogs: ' + '_' + names + '_' + '*'
-  };
-  return message;
 };
 
 const changelogPropValuesArray = async (func, propName) => {
@@ -104,6 +93,5 @@ const changelogPropValuesArray = async (func, propName) => {
 };
 
 module.exports = {
-  parseRequest: parseRequest,
-  usageHint: usageHint
+  parseRequest: parseRequest
 };
