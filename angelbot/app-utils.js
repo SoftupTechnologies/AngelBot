@@ -1,6 +1,10 @@
 const dbAction = require('./dynamo-db-utils');
 const slackFormatter = require('./json-to-slack');
-const slackMenu = require('./slack-menu');
+const slackMenu = require('./slack-menus');
+// switch statement variables
+const actionSelectedChangelog = 'action_select_changelog';
+const version = 'version';
+const actionSlackCommand = '';
 
 // func is an async function and e.g. does CRUD operations
 const actAndRespondSlack = async (asyncFunc) => {
@@ -14,14 +18,31 @@ const actAndRespondSlack = async (asyncFunc) => {
   return (dbData);
 };
 
-const parseSlackGetData = async (payload) => {
+const parseRequest = async (payload) => {
   if (payload.actions !== undefined) {
     const actionType = payload.actions[0].action_id;
-    const dbInfo = await parseSlackReadDB(actionType);
-    return (slackFormatter.jsonToSlack(dbInfo));
+    switch (actionType) {
+      case actionSelectedChangelog: {
+        const changelogName = payload.actions[0].selected_option.value;
+        const versions = await changelogPropValuesArray(dbAction.readAllChangelogVersions(changelogName), 'version');
+        return slackMenu.getOptionsMenu(changelogName, versions);
+      }
+      case version: {
+        const version = payload.actions[0].selected_option.value;
+        const blockID = payload.actions[0].block_id;
+        const changelogName = blockID.split('#')[1];
+        const dbInfo = await parseSlackReadDB(changelogName + ' version ' + version);
+        const converted = slackFormatter.jsonToSlack(dbInfo);
+        return converted;
+      }
+      default:
+        return { text: 'something went wrong' };
+    }
   }
-  const names = await formatedChangelogNames();
-  return slackMenu.mainMenu(names);
+  // const dbInfo = await parseSlackReadDB();
+  // slackFormatter.jsonToSlack(dbInfo);
+  const changelogNames = await changelogPropValuesArray(dbAction.readAllChangelogsNames(), 'name');
+  return slackMenu.getMainMenu(changelogNames);
 };
 
 const parseSlackReadDB = async (rawText) => {
@@ -62,7 +83,7 @@ const parseSlackReadDB = async (rawText) => {
 };
 
 const usageHint = async () => {
-  const names = await formatedChangelogNames();
+  const names = await changelogPropValuesArray(dbAction.readAllChangelogsNames(), 'name');
   const message = {
     'text': '*Please use one of the following commands:*\n\n' +
       '*/changelog* name *latest* - _To get latest changes_\n' +
@@ -74,14 +95,15 @@ const usageHint = async () => {
   return message;
 };
 
-const formatedChangelogNames = async () => {
-  const namesJson = await dbAction.readAllChangelogs();
-  const names = namesJson.Items;
-  const distinctNames = [...new Set(names.map(x => x.name))];
-  return distinctNames;
+const changelogPropValuesArray = async (func, propName) => {
+  const valuesJSON = await func;
+  console.log('changelogPropValuesArray', valuesJSON);
+  const values = valuesJSON.Items;
+  const distinctValues = [...new Set(values.map(x => x[propName]))];
+  return distinctValues;
 };
 
 module.exports = {
-  parseSlackGetData: parseSlackGetData,
+  parseRequest: parseRequest,
   usageHint: usageHint
 };

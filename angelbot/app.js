@@ -9,12 +9,14 @@ const request = require('request');
 const handleSlackRequest = async (payload) => {
   console.log('request payload', payload);
   let parsedPayload;
+  // slack command objects doesn't need to be parsed, but slack requests with Payloads do
+  // shall be fixed to remove the if statement
   if (!isObject(payload)) {
     parsedPayload = JSON.parse(payload);
   } else {
     parsedPayload = payload;
   }
-  const slackPayload = await appUtils.parseSlackGetData(parsedPayload);
+  const slackPayload = await appUtils.parseRequest(parsedPayload);
   console.log('slackPayload', JSON.stringify(slackPayload));
   sendToSlack(slackPayload, parsedPayload.response_url);
 };

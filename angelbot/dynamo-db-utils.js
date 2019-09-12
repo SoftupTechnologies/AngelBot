@@ -93,7 +93,7 @@ const readCategoryChanges = async (name, category) => {
   return data;
 };
 
-const readAllChangelogs = async () => {
+const readAllChangelogsNames = async () => {
   const params = {
     TableName: tableName,
     ProjectionExpression: '#name',
@@ -111,9 +111,33 @@ const readAllChangelogs = async () => {
   return data;
 };
 
+const readAllChangelogVersions = async (changelogName) => {
+  const params = {
+    TableName: tableName,
+    ProjectionExpression: '#version',
+    FilterExpression: '#name = :nameVal',
+    ExpressionAttributeNames: {
+      '#version': 'version',
+      '#name': 'name'
+    },
+    ExpressionAttributeValues: {
+      ':nameVal': changelogName
+    }
+  };
+  let data;
+  try {
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    data = await docClient.scan(params).promise();
+  } catch (error) {
+    return error;
+  }
+  return data;
+};
+
 module.exports = {
   readLatestChangelog: readLatestChangelog,
   readChangelog: readChangelog,
   readCategoryChanges: readCategoryChanges,
-  readAllChangelogs: readAllChangelogs
+  readAllChangelogsNames: readAllChangelogsNames,
+  readAllChangelogVersions: readAllChangelogVersions
 };
