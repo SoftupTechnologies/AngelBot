@@ -81,7 +81,7 @@ const getOptionsMenu = (changelogName, versionsArray) => {
   };
 };
 
-// these fill the dropdown select options
+// fill the dropdown select options
 const arrayToSlackOptions = (arr) => {
   return arr.map(elem => {
     return {

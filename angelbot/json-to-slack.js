@@ -1,21 +1,61 @@
+const category = [
+  {
+    name: 'BREAKING CHANGES',
+    icon: ':bangbang:'
+  },
+  {
+    name: 'BUG FIXES',
+    icon: ':hammer_and_wrench:'
+  },
+  {
+    name: 'FEATURES',
+    icon: ':gift:'
+  },
+  {
+    name: 'IMPROVEMENTS',
+    icon: ':rocket:'
+  },
+  {
+    name: 'NOTES',
+    icon: ':memo:'
+  },
+  {
+    name: 'ENHANCEMENTS',
+    icon: ':gear:'
+  }
+];
+
+const noData = {
+  replace_original: false,
+  blocks:
+  {
+    'type': 'section',
+    'text':
+    {
+      'type': 'mrkdwn',
+      'text': 'No data'
+    }
+  }
+};
+
 const jsonToSlack = (jsonData) => {
   if (!jsonData.Items) {
     return jsonData;
   }
-  let items = jsonData.Items;
+  const items = jsonData.Items;
   if (!items.length) {
-    return { replace_original: false, blocks: { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'No data' } } };
+    return noData;
   }
   let slackMsg = items.map(x =>
     ':checkered_flag: Version: *' + x.version + '*\n' +
     ':date: Date: *' + x.date + '*\n\n' +
-    (typeof x['BREAKING CHANGES'] !== 'undefined' ? '\n:bangbang: BREAKING CHANGES\n' + extractCategoryChanges(x['BREAKING CHANGES']) + '\n' : '') +
-    (typeof x['BUG FIXES'] !== 'undefined' ? '\n:hammer_and_wrench: BUG FIXES\n' + extractCategoryChanges(x['BUG FIXES']) + '\n' : '') +
-    (typeof x['FEATURES'] !== 'undefined' ? '\n:gift: FEATURES\n' + extractCategoryChanges(x['FEATURES']) + '\n' : '') +
-    (typeof x['IMPROVEMENTS'] !== 'undefined' ? '\n:rocket: IMPROVEMENTS\n' + extractCategoryChanges(x['IMPROVEMENTS']) + '\n' : '') +
-    (typeof x['NOTES'] !== 'undefined' ? '\n:memo: NOTES\n' + extractCategoryChanges(x['NOTES']) + '\n' : '') +
-    (typeof x['ENHANCEMENTS'] !== 'undefined' ? '\n:gear: ENHANCEMENTS\n' + extractCategoryChanges(x['ENHANCEMENTS']) + '\n' : '') +
-    '\n'
+    category.map(cat => {
+      if (typeof x[cat.name] !== 'undefined') {
+        return '\n' + cat.icon + ' ' + cat.name + extractCategoryChanges(x[cat.name]) + '\n';
+      } else {
+        return '';
+      }
+    }).join('') + '\n'
   );
   return toSlackStructure(slackMsg);
 };
@@ -29,15 +69,14 @@ const extractCategoryChanges = (jsonData) => {
 };
 
 const toSlackStructure = (arr) => {
-  let slackMessage =
-    arr.reduce((accumulator, current) => {
-      return accumulator.concat(
-        { 'type': 'divider' },
-        { 'type': 'section',
-          'text': { 'type': 'mrkdwn', 'text': current }
-        }
-      );
-    }, []);
+  let slackMessage = arr.map(elem => {
+    return (
+      { 'type': 'divider' },
+      { 'type': 'section',
+        'text': { 'type': 'mrkdwn', 'text': elem }
+      }
+    );
+  });
   return { replace_original: false, blocks: slackMessage };
 };
 
