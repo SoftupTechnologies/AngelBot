@@ -22,7 +22,7 @@ const error = {
 };
 
 // func is an async function and e.g. does CRUD operations
-const actAndRespondSlack = async (asyncFunc) => {
+const asyncFuncAndRespond = async (asyncFunc) => {
   const dbData = await asyncFunc
     .then((data) => {
       return data;
@@ -34,19 +34,20 @@ const actAndRespondSlack = async (asyncFunc) => {
 };
 
 const parseRequest = async (payload) => {
+  // if payload is undefined (since slack slach command has no payload) send the menu to select the changelog
   if (payload.actions !== undefined) {
     const actionType = payload.actions[0].action_id;
     switch (actionType) {
+      // if the changelog was selected, then send the options
       case actionSelectedChangelog: {
         const changelogName = payload.actions[0].selected_option.value;
         const versions = await changelogPropValuesArray(dbAction.readAllChangelogVersions(changelogName), 'version');
         return slackMenu.getOptionsMenu(changelogName, versions);
       }
       case version: {
-        const version = payload.actions[0].selected_option.value;
-        const blockID = payload.actions[0].block_id;
-        const changelogName = blockID.split('#')[1];
-        const dbInfo = await parseSlackReadDB(changelogName + ' version ' + version);
+        const selectedVersion = payload.actions[0].selected_option.value;
+        const changelogName = payload.actions[0].block_id.split('#')[1];
+        const dbInfo = await parseSlackReadDB(changelogName + ' version ' + selectedVersion);
         const converted = slackFormatter.jsonToSlack(dbInfo);
         return converted;
       }
@@ -60,6 +61,7 @@ const parseRequest = async (payload) => {
   return slackMenu.getMainMenu(changelogNames);
 };
 
+// Always returns JSON
 const parseSlackReadDB = async (rawText) => {
   const tokens = rawText.match(/\S+/g);
   let dbJSON;
@@ -67,14 +69,14 @@ const parseSlackReadDB = async (rawText) => {
     const changelogName = tokens[0];
     switch (tokens[1]) {
       case 'latest':
-        dbJSON = await actAndRespondSlack(dbAction.readLatestChangelog(changelogName));
+        dbJSON = await asyncFuncAndRespond(dbAction.readLatestChangelog(changelogName));
         break;
       case 'all':
-        dbJSON = await actAndRespondSlack(dbAction.readChangelog(changelogName));
+        dbJSON = await asyncFuncAndRespond(dbAction.readChangelog(changelogName));
         break;
       case 'version':
         if (tokens[2]) {
-          dbJSON = await actAndRespondSlack(dbAction.readChangelog(changelogName, tokens[2]));
+          dbJSON = await asyncFuncAndRespond(dbAction.readChangelog(changelogName, tokens[2]));
           break;
         } else {
           dbJSON = error;
@@ -82,10 +84,10 @@ const parseSlackReadDB = async (rawText) => {
         }
       case 'category':
         if (tokens[3]) {
-          dbJSON = await actAndRespondSlack(dbAction.readCategoryChanges(changelogName, tokens[2] + ' ' + tokens[3]));
+          dbJSON = await asyncFuncAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2] + ' ' + tokens[3]));
           break;
         } else {
-          dbJSON = await actAndRespondSlack(dbAction.readCategoryChanges(changelogName, tokens[2]));
+          dbJSON = await asyncFuncAndRespond(dbAction.readCategoryChanges(changelogName, tokens[2]));
           break;
         }
       default:
