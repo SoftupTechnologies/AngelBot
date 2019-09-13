@@ -36,6 +36,13 @@ const getOptionsMenu = (changelogName, versionsArray) => {
       { 'type': 'divider' },
       {
         'type': 'section',
+        'text': {
+          'type': 'mrkdwn',
+          'text': 'Ok, what do you want to know about *' + changelogName + '*?'
+        }
+      },
+      {
+        'type': 'section',
         'block_id': 'action_select_version#' + changelogName,
         'text': {
           'type': 'mrkdwn',
@@ -76,18 +83,16 @@ const getOptionsMenu = (changelogName, versionsArray) => {
 
 // these fill the dropdown select options
 const arrayToSlackOptions = (arr) => {
-  return arr.reduce((accumulator, current) => {
-    return accumulator.concat(
-      {
-        'text': {
-          'type': 'plain_text',
-          'text': current,
-          'emoji': true
-        },
-        'value': current
-      }
-    );
-  }, []);
+  return arr.map(elem => {
+    return {
+      'text': {
+        'type': 'plain_text',
+        'text': elem,
+        'emoji': true
+      },
+      'value': elem
+    };
+  });
 };
 
 module.exports = {

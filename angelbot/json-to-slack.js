@@ -4,7 +4,7 @@ const jsonToSlack = (jsonData) => {
   }
   let items = jsonData.Items;
   if (!items.length) {
-    return { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'No data' } };
+    return { replace_original: false, blocks: { 'type': 'section', 'text': { 'type': 'mrkdwn', 'text': 'No data' } } };
   }
   let slackMsg = items.map(x =>
     ':checkered_flag: Version: *' + x.version + '*\n' +

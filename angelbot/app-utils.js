@@ -4,9 +4,22 @@ const slackMenu = require('./slack-menus');
 // switch statement variables
 const actionSelectedChangelog = 'action_select_changelog';
 const version = 'version';
-const actionSlackCommand = '';
+// const actionSlackCommand = '';
 
-const error = { text: 'something went wrong :fire_engine:' };
+const error = {
+  replace_original: false,
+  blocks:
+  [
+    {
+      'type': 'section',
+      'text':
+    {
+      'type': 'mrkdwn',
+      'text': 'something went wrong :fire_engine:'
+    }
+    }
+  ]
+};
 
 // func is an async function and e.g. does CRUD operations
 const actAndRespondSlack = async (asyncFunc) => {
