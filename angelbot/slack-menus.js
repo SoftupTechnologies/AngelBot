@@ -95,7 +95,23 @@ const arrayToSlackOptions = (arr) => {
   });
 };
 
+const errorMessage = {
+  replace_original: false,
+  blocks:
+  [
+    {
+      'type': 'section',
+      'text':
+    {
+      'type': 'mrkdwn',
+      'text': 'something went wrong :fire_engine:'
+    }
+    }
+  ]
+};
+
 module.exports = {
   getMainMenu: getMainMenu,
-  getOptionsMenu: getOptionsMenu
+  getOptionsMenu: getOptionsMenu,
+  errorMessage: errorMessage
 };

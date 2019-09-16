@@ -28,14 +28,16 @@ const category = [
 const noData = {
   replace_original: false,
   blocks:
-  {
-    'type': 'section',
-    'text':
+  [
+    {
+      'type': 'section',
+      'text':
     {
       'type': 'mrkdwn',
       'text': 'No data'
     }
-  }
+    }
+  ]
 };
 
 const jsonToSlack = (jsonData) => {
