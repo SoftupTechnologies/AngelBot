@@ -43,6 +43,42 @@ const getOptionsMenu = (changelogName, versionsArray) => {
       },
       {
         'type': 'section',
+        'block_id': 'action_see_latest#' + changelogName,
+        'text': {
+          'type': 'mrkdwn',
+          'text': 'See latest changes'
+        },
+        'accessory': {
+          'action_id': 'latest',
+          'type': 'button',
+          'text': {
+            'type': 'plain_text',
+            'text': 'Show',
+            'emoji': true
+          },
+          'value': 'latest'
+        }
+      },
+      {
+        'type': 'section',
+        'block_id': 'action_see_all#' + changelogName,
+        'text': {
+          'type': 'mrkdwn',
+          'text': 'See all changes'
+        },
+        'accessory': {
+          'action_id': 'all',
+          'type': 'button',
+          'text': {
+            'type': 'plain_text',
+            'text': 'Show',
+            'emoji': true
+          },
+          'value': 'all'
+        }
+      },
+      {
+        'type': 'section',
         'block_id': 'action_select_version#' + changelogName,
         'text': {
           'type': 'mrkdwn',

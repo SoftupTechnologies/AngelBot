@@ -1,13 +1,12 @@
 const dbAction = require('./dynamo-db-utils');
 const slackFormatter = require('./json-to-slack');
 const slackMenu = require('./slack-menus');
-// switch statement variables
+
 const actionSelectedChangelog = 'action_select_changelog';
 const version = 'version';
 const category = 'category';
 const all = 'all';
 const latest = 'latest';
-// const actionSlackCommand = '';
 
 // func is an async function and e.g. does CRUD operations
 const asyncFuncAndRespond = async (asyncFunc) => {
@@ -40,7 +39,10 @@ const parseRequest = async (payload) => {
 const interpretAndRetFormated = async (payload) => {
   const actionType = payload.actions[0].action_id;
   const changelogName = payload.actions[0].block_id.split('#')[1];
-  const selected = payload.actions[0].selected_option.value;
+  let selected;
+  if (payload.actions[0].selected_option !== undefined) {
+    selected = payload.actions[0].selected_option.value;
+  }
   let dbJSON;
   switch (actionType) {
     case latest:
