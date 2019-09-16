@@ -59,6 +59,7 @@ const jsonToSlack = (jsonData) => {
       }
     }).join('') + '\n'
   );
+  console.log('json to slack before to slack', slackMsg);
   return toSlackStructure(slackMsg);
 };
 
@@ -73,13 +74,23 @@ const extractCategoryChanges = (jsonData) => {
 const toSlackStructure = (arr) => {
   let slackMessage = arr.map(elem => {
     return (
-      { 'type': 'divider' },
-      { 'type': 'section',
-        'text': { 'type': 'mrkdwn', 'text': elem }
-      }
+      [
+        { 'type': 'divider' },
+        { 'type': 'section',
+          'text': { 'type': 'mrkdwn', 'text': elem }
+        }
+      ]
     );
-  });
+  }
+  );
+  slackMessage = flatten(slackMessage);
   return { replace_original: false, blocks: slackMessage };
+};
+
+let flatten = (arr) => {
+  return arr.reduce(function (flat, toFlatten) {
+    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+  }, []);
 };
 
 module.exports = {
