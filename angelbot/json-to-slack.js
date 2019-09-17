@@ -35,10 +35,10 @@ const noData = {
     {
       'type': 'section',
       'text':
-    {
-      'type': 'mrkdwn',
-      'text': 'No data'
-    }
+      {
+        'type': 'mrkdwn',
+        'text': 'No data'
+      }
     }
   ]
 };
