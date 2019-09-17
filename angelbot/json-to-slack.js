@@ -1,3 +1,6 @@
+const flagEmoji = ':checkered_flag:';
+const dateEmoji = ':date:';
+
 const category = [
   {
     name: 'BREAKING CHANGES',
@@ -49,23 +52,22 @@ const jsonToSlack = (jsonData) => {
     return noData;
   }
   let slackMsg = items.map(x =>
-    ':checkered_flag: Version: *' + x.version + '*\n' +
-    ':date: Date: *' + x.date + '*\n\n' +
+    `${flagEmoji} Version: *${x.version}* \n` +
+    `${dateEmoji} Date: *${x.date}* \n\n` +
     category.map(cat => {
       if (typeof x[cat.name] !== 'undefined') {
-        return '\n' + cat.icon + ' ' + cat.name + extractCategoryChanges(x[cat.name]) + '\n';
+        return `\n\n ${cat.icon} ${cat.name} ${extractCategoryChanges(x[cat.name])} \n`;
       } else {
         return '';
       }
-    }).join('') + '\n'
+    }).join('') + `\n`
   );
-  console.log('json to slack before to slack', slackMsg);
   return toSlackStructure(slackMsg);
 };
 
 const extractCategoryChanges = (jsonData) => {
   let answer = jsonData.map(x =>
-    '\n• ' + x.description
+    `\n• ${x.description}`
   );
   answer = answer.join('');
   return answer;
