@@ -15,16 +15,17 @@ const sns = new AWS.SNS();
 
 // Prevent timeout with status 200 and invoke angelbot to handle request
 app.post('/api/v1/changelog', async (req, res) => {
-  console.log('req', req);
-  let payload = { type: 'slash', response_url: req.body.response_url, trigger_id: req.trigger_id };
+  let payload = { type: 'slash', response_url: req.body.response_url };
   if (req.body.payload !== undefined) {
     payload = req.body.payload;
   }
-
   await sendSNS(payload);
-  res.status(200).send(
-    'ok'
-  );
+  if (req.body.command) {
+    res.status(200).send(
+      `OK ${formatName(req.body.user_name)}`
+    );
+  }
+  res.status(200).send();
 });
 
 const sendSNS = async (payload) => {

@@ -33,9 +33,10 @@ const actAndRespond = (asyncFunc, res) => {
     });
 };
 
-const parseChangelongAndRespond = (req, res, name) => {
+const parseChangelongAndRespond = (req, res) => {
   const content = req.body.content;
   const batchStore = req.body.store_all;
+  const name = req.body.name;
   try {
     const parsed = parseInput(content);
     if (batchStore) {
@@ -50,6 +51,7 @@ const parseChangelongAndRespond = (req, res, name) => {
     });
   }
 };
+
 module.exports = {
   actAndRespond: actAndRespond,
   parseChangelongAndRespond: parseChangelongAndRespond

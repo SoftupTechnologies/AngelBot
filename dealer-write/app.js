@@ -21,7 +21,7 @@ app.post('/api/v1/changelog_write', (req, res) => {
       message: 'content and name are both required'
     });
   } else {
-    appUtils.parseChangelongAndRespond(req, res, req.body.name);
+    appUtils.parseChangelongAndRespond(req, res);
   }
 });
 
