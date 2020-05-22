@@ -7,20 +7,46 @@
     "start-angelbot": "npx nodemon ./angelbot/app.local.js --exec babel-node --",
     "start-dealer-read": "npx nodemon ./dealer-read/app.local.js --exec babel-node --",
     "start-dealer-write": "npx nodemon ./dealer-write/app.local.js --exec babel-node --",
-    "zip-angelbot": "cd ./angelbot && zip -r ../angelbot-pack.zip *",
-    "zip-dealer-read": "cd ./dealer-read && zip -r ../dealer-read-pack.zip *",
-    "zip-dealer-write": "cd ./dealer-write && zip -r ../dealer-write-pack.zip *",
-    "upload-angelbot": "aws lambda update-function-code --function-name angelbot --zip-file fileb://angelbot-pack.zip --cli-connect-timeout 20000",
-    "upload-dealer-read": "aws lambda update-function-code --function-name dealer-read --zip-file fileb://dealer-read-pack.zip --cli-connect-timeout 20000",
-    "upload-dealer-write": "aws lambda update-function-code --function-name dealer-write --zip-file fileb://dealer-write-pack.zip --cli-connect-timeout 20000",
-    "deploy-angelbot": "npm run zip-angelbot && npm run upload-angelbot",
-    "deploy-dealer-read": "npm run zip-dealer-read && npm run upload-dealer-read",
-    "deploy-dealer-write": "npm run zip-dealer-write && npm run upload-dealer-write",
-    "deploy": "npm run deploy-angelbot && npm run deploy-dealer-read && npm run deploy-dealer-write"
+    "convert": "npx nearleyc src/grammar/grammar.ne -o src/grammar/grammar.js",
+    "watch": "watch 'npm run convert' -o ./grammar/grammar.ne",
+    "test": "serverless-bundle test"
   },
   "author": "Erald Totraku",
   "license": "ISC",
   "devDependencies": {
-    "babel-preset-env": "^1.7.0"
+    "babel-cli": "^6.26.0",
+    "fork-ts-checker-webpack-plugin": "^4.1.4",
+    "mocha": "^7.1.2",
+    "nodemon": "^2.0.4",
+    "serverless-dotenv": "^1.0.0-beta.2",
+    "serverless-dotenv-plugin": "^2.4.2",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-export-env": "^1.3.1",
+    "serverless-offline": "^6.1.7",
+    "watch": "^1.0.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.682.0",
+    "aws-serverless-express": "^3.3.8",
+    "body-parser": "^1.19.0",
+    "corejs": "^1.0.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "moo": "^0.5.1",
+    "nearley": "^2.19.3",
+    "prettier": "^2.0.5",
+    "request": "^2.88.2",
+    "serverless": "^1.71.3",
+    "serverless-bundle": "^1.4.0",
+    "serverless-offline-sns": "^0.68.0",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "source-map-support": "^0.5.19",
+    "tsscmp": "^1.0.6"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   }
 }
